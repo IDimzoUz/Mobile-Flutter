@@ -1,0 +1,78 @@
+name: imzo
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.24.3'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  # di
+  get_it: ^7.6.7
+  # equatable
+  equatable: ^2.0.5
+  # state manager
+  flutter_bloc: ^8.1.5
+  # hive
+  hive: ^2.2.3
+  # path
+  path_provider: ^2.1.2
+  # rest api
+  dio: ^5.4.2+1
+  dio_retry_plus: ^2.0.6
+  # chuck
+  #  chuck_interceptor: ^2.1.2
+  # box
+  gap: ^3.0.1
+  # router
+  go_router: ^14.2.1
+  # svg
+  flutter_svg: ^2.0.10+1
+  # url launchers
+  url_launcher: ^6.2.5
+  # sms autofill
+  pin_input_text_field: ^4.5.1
+  # package info
+  package_info_plus: ^8.0.3
+  # cached network image
+  cached_network_image: ^3.3.1
+  persistent_bottom_nav_bar_v2: ^5.3.0
+  image_picker: ^1.0.7
+  widget_lifecycle: 1.0.0+1
+  #  flutter_local_notifications: ^19.0.0
+  plugin_platform_interface: ^2.1.8
+  lottie: ^3.2.0
+
+
+dev_dependencies:
+  bloc_test: ^9.1.7
+  build_runner: ^2.4.9
+  flutter_lints: ^3.0.2
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.4.4
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/AppIcons.ttf
+    - assets/locale/
+    - assets/images/
+    - assets/images/svg/
+    - assets/images/png/
+    - assets/images/webp/
+    - assets/images/gif/
+    - assets/images/docs/
+
+  fonts:
+    - family: AppIcons
+      fonts:
+        - asset: assets/fonts/AppIcons.ttf

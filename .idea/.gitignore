@@ -1,3 +1,16 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+# Flutter build fayllari
+/build/
+/ios/
+/android/
+
+# Platformaga xos ignore qoidalari
+**/App.framework/
+**/Flutter.framework/
+**/Flutter.podspec
+**/FlutterPluginRegistrant/
+**/Generated.xcconfig
+**/Pods/
+**/Runner.app/

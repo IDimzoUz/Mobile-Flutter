@@ -58,6 +58,7 @@ sealed class Urls {
   static const String login = "/api/auth/send-code";
   static const String verify = "/api/auth/verify";
   static const String categories = "/api/categories";
+  static const String contractTemplatesCategory = "/api/contract-templates/category";
 
 }
 

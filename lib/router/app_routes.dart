@@ -10,6 +10,7 @@ import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/auth/presentation/otp/otp_page.dart";
 import "package:imzo/features/auth/presentation/pages/auth_page.dart";
 import "package:imzo/features/auth/presentation/public_oferta/public_offer_page.dart";
+import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
 import "package:imzo/features/docs/presentation/formalization/formalization_page.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
@@ -124,7 +125,14 @@ final GoRouter router = GoRouter(
       path: Routes.selectLangDocs,
       name: Routes.selectLangDocs,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const SelectLangDocsPage(),
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: BlocProvider<SelectLangDocsBloc>(
+              create: (_)=>sl<SelectLangDocsBloc>(),
+              child: SelectLangDocsPage(id: state.extra! as int)
+          )
+      ),
     ),
 
     GoRoute(

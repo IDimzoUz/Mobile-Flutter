@@ -10,6 +10,7 @@ import "package:get_it/get_it.dart";
 import "package:go_router/go_router.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/docs/blocs/docs_page_bloc.dart";
+import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
 import "package:hive/hive.dart";
 import "package:imzo/core/connectivity/network_info.dart";
@@ -19,7 +20,8 @@ import "package:imzo/features/api/repository_impl.dart";
 import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/home/blocs/home_page_bloc.dart";
 import "package:imzo/features/main/presentation/bloc/main_bloc.dart";
-import "package:imzo/features/profile/blocs/profile_page_bloc.dart";
+import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
+import "package:imzo/features/profile/blocs/profile_bloc/profile_page_bloc.dart";
 import "package:imzo/router/app_routes.dart";
 import "package:package_info_plus/package_info_plus.dart";
 import "package:path_provider/path_provider.dart";
@@ -154,7 +156,9 @@ void _authFeature() {
     ..registerFactory(() => OtpBloc(repository: sl()))
     ..registerFactory(() => HistoryBloc(repository: sl()))
     ..registerFactory(() => ProfilePageBloc(repository: sl()))
+    ..registerFactory(() => IdentificationBloc(repository: sl()))
     ..registerFactory(() => DocsPageBloc(repository: sl()))
+    ..registerFactory(() => SelectLangDocsBloc(repository: sl()))
     ..registerFactory(() => HomePageBloc(repository: sl()));
 
 

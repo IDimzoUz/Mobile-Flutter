@@ -7,10 +7,8 @@ import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
 import "package:imzo/features/docs/model/contract_tem_category_response.dart";
-import "package:imzo/features/others/presentation/pages/language/language_page.dart";
 import "package:imzo/features/others/presentation/pages/language/widgets/lan_checkbox_widget.dart";
 import "package:imzo/router/app_routes.dart";
-
 
 class SelectLangDocsPage extends StatefulWidget {
   const SelectLangDocsPage({super.key, required this.id});

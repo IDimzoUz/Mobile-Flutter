@@ -68,9 +68,6 @@ class _PageState extends State<DocsPage> with DocsMixin {
                 padding: EdgeInsets.zero,
                 shadowEnabled: false,
                 backgroundColor: AppColors.opacity,
-                onPressed: () {
-                  print('ad');
-                },
                 label: Row(
                   children: [
                     ClipRRect(
@@ -112,34 +109,33 @@ class _PageState extends State<DocsPage> with DocsMixin {
                 ),
               ),
               Expanded(
-                child: filteredItems.isNotEmpty 
-                    ? ListView.separated(
-                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
-                        itemBuilder: (_, index) => DocsItemWidget(
-                          value: false,
-                          onTap: () {
-                            final item = filteredItems[index];
-                            if (item.children != null && item.children!.isNotEmpty) {
-                              searchController.clear();
-                              setState(() {
-                                navigationStack.add(currentItems);
-                                breadcrumbs.add(item);
-                                currentItems = item.children!;
-                                filteredItems = currentItems;
-                              });
-                            } else {
-                              context.pushNamed(Routes.selectLangDocs);
-                            }
-                          },
-                          title: filteredItems[index].nameUz,
-                        ),
-                        separatorBuilder: (_, __) => AppUtils.kGap,
-                        itemCount: filteredItems.length,
-                      )
-                    : const Center(
-                        child: Text('Hech nima topilmadi...', style: TextStyle(color: AppColors.grey2),),
-                      )
-                  
+                child: filteredItems.isNotEmpty
+                  ? ListView.separated(
+                      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
+                      itemBuilder: (_, index) => DocsItemWidget(
+                        value: false,
+                        title: filteredItems[index].nameUz,
+                        onTap: () {
+                          final item = filteredItems[index];
+                          if (item.children != null && item.children!.isNotEmpty) {
+                            searchController.clear();
+                            setState(() {
+                              navigationStack.add(currentItems);
+                              breadcrumbs.add(item);
+                              currentItems = item.children!;
+                              filteredItems = currentItems;
+                            });
+                          } else {
+                            context.pushNamed(Routes.selectLangDocs, extra: item.id);
+                          }
+                        },
+                      ),
+                      separatorBuilder: (_, __) => AppUtils.kGap,
+                      itemCount: filteredItems.length,
+                  )
+                  : const Center(
+                      child: Text('Hech nima topilmadi...', style: TextStyle(color: AppColors.grey2)),
+                    )
               ),
             ],
           ),

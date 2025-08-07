@@ -24,6 +24,7 @@ import "package:imzo/features/main/presentation/pages/main_page.dart";
 import "package:imzo/features/others/presentation/pages/internet_connection/internet_connection_page.dart";
 import "package:imzo/features/others/presentation/pages/language/language_page.dart";
 import "package:imzo/features/others/presentation/pages/splash/splash_page.dart";
+import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
 import "package:imzo/features/profile/presentation/edit_profile/edit_profile_page.dart";
 import "package:imzo/features/profile/presentation/identification/identification_page.dart";
 import "package:imzo/injector_container.dart";
@@ -129,7 +130,7 @@ final GoRouter router = GoRouter(
           context: context,
           state: state,
           child: BlocProvider<SelectLangDocsBloc>(
-              create: (_)=>sl<SelectLangDocsBloc>(),
+              create: (_) => sl<SelectLangDocsBloc>(),
               child: SelectLangDocsPage(id: state.extra! as int)
           )
       ),
@@ -158,7 +159,7 @@ final GoRouter router = GoRouter(
           context: context,
           state: state,
           child: BlocProvider<OtpBloc>(
-              create: (_)=>sl<OtpBloc>(),
+              create: (_) => sl<OtpBloc>(),
               child: OtpPage(data: state.extra! as LoginResponse)
           )
       ),
@@ -175,7 +176,10 @@ final GoRouter router = GoRouter(
       path: Routes.identificationPage,
       name: Routes.identificationPage,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const IdentificationPage(),
+      builder: (_, __) => BlocProvider<IdentificationBloc>(
+        create: (_)=>sl<IdentificationBloc>(),
+        child: const IdentificationPage()
+      )
     ),
 
     GoRoute(

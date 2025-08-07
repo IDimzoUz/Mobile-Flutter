@@ -37,7 +37,7 @@ class _AuthPageState extends State<AuthPage> with AuthMixin {
           appBar: AppBar(
             leading: IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.arrow_back)),
             actions: [
-              IconButton(onPressed: () {  }, icon: SvgPicture.asset(SvgIcons.icInfoCircle)),
+              IconButton(onPressed: () { }, icon: SvgPicture.asset(SvgIcons.icInfoCircle)),
               const SizedBox(width: 5)
             ],
           ),
@@ -96,22 +96,20 @@ class _AuthPageState extends State<AuthPage> with AuthMixin {
                               onChanged: (value) {
                                 setState(() {});
                               },
+
                               errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.red)),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.lightGrey),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.black),
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.baseColor),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: AppColors.lightGrey),
                               ),
-                              validator: (String? value) {
-                                return null;
-                              },
                             ),
                           ),
                         ),

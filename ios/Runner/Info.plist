@@ -49,5 +49,7 @@
     <string>YES</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSCameraUsageDescription</key>
+    <string>Required for document and facial capture</string>
 </dict>
 </plist>

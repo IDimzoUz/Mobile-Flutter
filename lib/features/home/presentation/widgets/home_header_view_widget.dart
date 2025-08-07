@@ -12,7 +12,7 @@ class HomeHeaderViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: () => context.pushNamed(Routes.identificationPage),
+    onTap: () => localSource.verification ? context.pushNamed(Routes.editProfilePage) : context.pushNamed(Routes.identificationPage),
     child: Row(
       children: [
         Container(
@@ -25,32 +25,33 @@ class HomeHeaderViewWidget extends StatelessWidget {
               border: Border.all(color: AppColors.baseColor)
           ),
           child: Center(
-            child: SvgPicture.asset(SvgIcons.icHistory),
+            child: SvgPicture.asset(SvgIcons.icPerson),
           ),
         ),
         AppUtils.kGap8,
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Пользователь",
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+        const Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "Пользователь",
+                style: TextStyle(
+                  color: AppColors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            Text(
-              "Прохождение идентификации",
-              style: TextStyle(
-                color: AppColors.orange,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              Text(
+                "Прохождение идентификации",
+                style: TextStyle(
+                  color: AppColors.orange,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        const Spacer(),
         CustomButton(
           backgroundColor: AppColors.opacity,
           width: 50,

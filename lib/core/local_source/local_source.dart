@@ -75,6 +75,12 @@ final class LocalSource {
   bool get hasOnboarding => box.get(AppKeys.hasOnboarding, defaultValue: true);
 
 
+  Future<void> setVerification({ required bool value }) async {
+    await box.put(AppKeys.verify, value);
+  }
+  bool get verification => box.get(AppKeys.verify, defaultValue: false);
+
+
   Future<void> setLanguage(String lang) async {
     await box.put(AppKeys.language, lang);
   }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218557214026",
+    "project_id": "imzo-2edfa",
+    "storage_bucket": "imzo-2edfa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218557214026:android:0149d8955e9e45413425b3",
+        "android_client_info": {
+          "package_name": "com.idimzo.imzo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwNXmWfjs94bK4gqkhhxckN1Pa-I6WJhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

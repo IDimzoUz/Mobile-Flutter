@@ -7,6 +7,8 @@ import "package:imzo/features/api/repository.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/home/model/category_response.dart";
+import "package:imzo/features/profile/model/user_me_response.dart";
+import "package:imzo/router/app_routes.dart";
 
 part "home_page_event.dart";
 
@@ -15,6 +17,7 @@ part "home_page_state.dart";
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc({required this.repository}) : super(const HomePageState(status: ApiStatus.initial)) {
     on<GetCategoryEvent>(_getCategory);
+    on<GetHomeMeEvent>(_getHomeMeEvent);
   }
 
   final Repository repository;
@@ -25,6 +28,18 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
        (Failure left) {emit(const HomePageState(status: ApiStatus.error)); },
        (List<CategoryResponse> right) async {
         emit(HomePageState(status: ApiStatus.success, categoryResponse: right));
+      },
+    );
+  }
+
+  Future<void> _getHomeMeEvent(GetHomeMeEvent event, Emitter<HomePageState> emit) async {
+    emit(const HomePageState(status: ApiStatus.loading));
+    final result = await repository.getUserMe();
+    await result.fold(
+          (Failure left) { emit(const HomePageState(status: ApiStatus.error)); },
+          (UserMeResponse right) async {
+        localSource.setVerification(value: true);
+        emit(HomePageState(status: ApiStatus.success, userMeResponse: right));
       },
     );
   }

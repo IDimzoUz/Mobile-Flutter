@@ -9,78 +9,85 @@ import "package:imzo/features/profile/model/user_me_response.dart";
 import "package:imzo/router/app_routes.dart";
 
 class MeProfileWidget extends StatelessWidget {
-  const MeProfileWidget({super.key, this.data, this.icon, this.onTap});
+  const MeProfileWidget({super.key, this.data, this.icon, this.onTap, this.editButton = false});
   final UserMeResponse? data;
   final String? icon;
+  final bool editButton;
   final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      Container(
-        width: 50,
-        height: 50,
-        margin: const EdgeInsets.only(left: 16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: AppUtils.kBorderRadius48,
-          border: Border.all(color: AppColors.baseColor),
-        ),
-        child: Center(
-          child: SvgPicture.asset(SvgIcons.icPerson),
-        ),
-      ),
-      AppUtils.kGap8,
-      if (!localSource.verification)
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              "A",
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+      Row(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            margin: const EdgeInsets.only(left: 16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: AppUtils.kBorderRadius48,
+              border: Border.all(color: AppColors.baseColor),
             ),
-            Text(
-              "ID:",
-              style: TextStyle(
-                color: AppColors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
+            child: Center(
+              child: SvgPicture.asset(SvgIcons.icPerson),
             ),
-          ],
-        )
-      else
-        GestureDetector(
-          onTap: () => context.pushNamed(Routes.identificationPage),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Пользователь",
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                "Прохождение идентификации",
-                style: TextStyle(
-                  color: AppColors.orange,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
           ),
-        ),
-      if (!localSource.verification) const Spacer(),
-      if (!localSource.verification) CustomButton(
+          AppUtils.kGap8,
+          if (localSource.verification)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "${data?.firstName ?? ""} ${data?.lastName ?? ""}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  "ID: ${data?.id ?? ""}",
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            )
+          else
+            GestureDetector(
+              onTap: () => context.pushNamed(Routes.identificationPage),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Пользователь",
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    "Прохождение идентификации",
+                    style: TextStyle(
+                      color: AppColors.orange,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+      const Spacer(),
+      if (localSource.verification && editButton) CustomButton(
         shadowEnabled: false,
         backgroundColor: AppColors.baseColor.withOpacity(0.08),
         width: 35,

@@ -1,6 +1,8 @@
 import "package:flutter/cupertino.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 import "package:imzo/constants/image_constants.dart";
 import "package:imzo/features/home/presentation/home_page.dart";
+import "package:imzo/features/profile/blocs/profile_bloc/profile_page_bloc.dart";
 import "package:imzo/features/profile/presentation/profile_page.dart";
 
 mixin ProfileMixin on State<ProfilePage> {
@@ -22,5 +24,10 @@ mixin ProfileMixin on State<ProfilePage> {
 
   late List<ProfileItemModel> dataModel = [];
 
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfilePageBloc>().add(const GetMeEvent());
+  }
 
 }

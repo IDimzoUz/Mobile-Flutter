@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
+import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import 'package:imzo/features/home/blocs/home_page_bloc.dart';
 import "package:imzo/features/home/presentation/mixin/home_mixin.dart";
 import "package:imzo/features/home/presentation/widgets/category_item_widget.dart";
@@ -24,18 +25,29 @@ class _HomePageState extends State<HomePage> with HomeMixin {
   void initState() {
     super.initState();
     context.read<HomePageBloc>().add(const GetCategoryEvent());
+    context.read<HomePageBloc>().add(const GetHomeMeEvent());
   }
 
   @override
   Widget build(BuildContext context) => BlocListener<HomePageBloc, HomePageState>(
-    listener: (BuildContext context, HomePageState state) async {},
-    listenWhen: (HomePageState p, HomePageState c) => p.categoryResponse != c.categoryResponse,
+    listener: (BuildContext context, HomePageState state) async {
+      if (state.status == ApiStatus.success) {
+        if (state.categoryResponse != null) {
+          categoryResponse = state.categoryResponse!;
+        }
+        if (state.userMeResponse != null) {
+          userMeResponse = state.userMeResponse!;
+        }
+        setState(() {});
+      }
+    },
+    listenWhen: (HomePageState p, HomePageState c) => p.categoryResponse != c.categoryResponse || p.userMeResponse != c.userMeResponse,
     child: LifecycleAware(
       observer: LifecycleObserver(
         onVisible: (Lifecycle l) { }
       ),
       builder: (BuildContext context, Lifecycle lifecycle) => BlocBuilder<HomePageBloc, HomePageState>(
-        buildWhen: (p, n) => p.categoryResponse != n.categoryResponse,
+        buildWhen: (p, n) => p.categoryResponse != n.categoryResponse || p.userMeResponse != n.userMeResponse,
         builder: (context, state) => Scaffold(
           body: Column(
             children: [
@@ -46,11 +58,11 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                     color: AppColors.baseColor.withOpacity(0.08),
                   borderRadius: const BorderRadius.horizontal(left: Radius.circular(20), right: Radius.circular(20))
                 ),
-                child: const Column(
+                child: Column(
                   children: [
-                    HomeHeaderViewWidget(),
+                    HomeHeaderViewWidget(data: userMeResponse),
                     AppUtils.kGap24,
-                    HomeStoriesWidget()
+                    const HomeStoriesWidget()
                   ],
                 ),
               ),
@@ -67,9 +79,9 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.only(left: 16, right: 16),
                           separatorBuilder: (_, __) => AppUtils.kGap,
-                          itemCount: state.categoryResponse?.length ?? 0,
+                          itemCount: categoryResponse?.length ?? 0,
                           itemBuilder: (_, index) => CategoryItemWidget(
-                            data: state.categoryResponse?[index],
+                            data: categoryResponse?[index],
                             onTap: () => widget.onChangeTab?.call(1),
                           ),
                         ),

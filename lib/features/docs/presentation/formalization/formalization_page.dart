@@ -12,13 +12,19 @@ import "package:imzo/features/others/presentation/pages/language/widgets/lan_che
 import "package:imzo/router/app_routes.dart";
 
 class FormalizationPage extends StatefulWidget {
-  const FormalizationPage({super.key});
-
+  const FormalizationPage({super.key, this.langID});
+  final int? langID;
   @override
   State<FormalizationPage> createState() => _PageState();
 }
 
 class _PageState extends State<FormalizationPage> {
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -34,7 +40,7 @@ class _PageState extends State<FormalizationPage> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: Icon(Icons.info_outlined),
+          icon: const Icon(Icons.info_outlined),
         )
       ],
     ),
@@ -181,7 +187,7 @@ class _PageState extends State<FormalizationPage> {
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: CustomButton(
         width: double.infinity,
-        label: const Text('Отправить'),
+        label: Text('Отправить'),
       ),
     ),
   );

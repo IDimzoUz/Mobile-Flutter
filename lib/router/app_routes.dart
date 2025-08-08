@@ -25,6 +25,7 @@ import "package:imzo/features/others/presentation/pages/internet_connection/inte
 import "package:imzo/features/others/presentation/pages/language/language_page.dart";
 import "package:imzo/features/others/presentation/pages/splash/splash_page.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
+import "package:imzo/features/profile/model/user_me_response.dart";
 import "package:imzo/features/profile/presentation/edit_profile/edit_profile_page.dart";
 import "package:imzo/features/profile/presentation/identification/identification_page.dart";
 import "package:imzo/injector_container.dart";
@@ -140,7 +141,11 @@ final GoRouter router = GoRouter(
       path: Routes.formalizationPage,
       name: Routes.formalizationPage,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const FormalizationPage(),
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: FormalizationPage(langID: state.extra! as int)
+      ),
     ),
 
     GoRoute(
@@ -200,7 +205,11 @@ final GoRouter router = GoRouter(
       path: Routes.editProfilePage,
       name: Routes.editProfilePage,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const EditProfilePage(),
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: EditProfilePage(data: state.extra! as UserMeResponse)
+      ),
     ),
 
 

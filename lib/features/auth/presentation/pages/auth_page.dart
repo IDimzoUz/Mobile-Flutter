@@ -176,6 +176,7 @@ class _AuthPageState extends State<AuthPage> with AuthMixin {
                       if (checkBoxPolicy && state.status != ApiStatus.loading) {
                         localSource.setPhoneNumber("+998 ${loginController.text}");
                         context.read<AuthBloc>().add(AuthLoginEvent(phoneNumber: "+998$phone"));
+                        print("PHONE: ${localSource.getPhoneNumber()}");
                       }
                     },
                     label: state.status == ApiStatus.loading

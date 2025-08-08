@@ -23,7 +23,6 @@ class ProfilePage extends StatefulWidget {
 class _PageState extends State<ProfilePage> with ProfileMixin {
 
 
-
   @override
   Widget build(BuildContext context) => BlocListener<ProfilePageBloc, ProfilePageState>(
     listener: (BuildContext context, ProfilePageState state) async {},
@@ -31,7 +30,6 @@ class _PageState extends State<ProfilePage> with ProfileMixin {
     child: LifecycleAware(
       observer: LifecycleObserver(
         onVisible: (Lifecycle l) {
-          context.read<ProfilePageBloc>().add(const GetMeEvent());
           dataModel = localSource.verification ? verifyDataModel : noVerifyDataModel;
           setState(() {});
         }
@@ -39,41 +37,46 @@ class _PageState extends State<ProfilePage> with ProfileMixin {
       builder: (BuildContext context, Lifecycle lifecycle) => BlocBuilder<ProfilePageBloc, ProfilePageState>(
         buildWhen: (p, n) => p.status != n.status,
         builder: (context, state) => Scaffold(
-          body: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(top: 66, bottom: 32),
-                decoration: BoxDecoration(
-                  color: AppColors.baseColor.withOpacity(0.08),
-                  borderRadius: const BorderRadius.horizontal(left: Radius.circular(16), right: Radius.circular(16))
-                ),
-                child: MeProfileWidget(),
-              ),
-              Flexible(
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 24),
-                  shrinkWrap: true,
-                  separatorBuilder: (_, __) => AppUtils.kGap,
-                  itemCount: dataModel.length,
-                  itemBuilder: (_, index) => ProfileItemWidget(
-                    icon: dataModel[index].icon,
-                    title: dataModel[index].title,
-                    desc: dataModel[index].desc,
-                    onTap: () {
-                      switch (dataModel[index].index) {
-                        case 0: context.pushNamed(Routes.editProfilePage);
-                          break;
-                        case 1: context.pushNamed(Routes.historyBalansPage);
-                          break;
-                        case 2: break;
-                        case 3: break;
-                        default: break;
-                      }
-                    },
+          body: RefreshIndicator(
+            onRefresh: () async {
+              context.read<ProfilePageBloc>().add(const GetMeEvent());
+            },
+            color: AppColors.baseColor,
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 66, bottom: 32),
+                  decoration: BoxDecoration(
+                    color: AppColors.baseColor.withOpacity(0.08),
+                    borderRadius: const BorderRadius.horizontal(left: Radius.circular(16), right: Radius.circular(16))
                   ),
+                  child: MeProfileWidget(data: state.userMeResponse, editButton: true),
                 ),
-              )
-            ],
+                Flexible(
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    separatorBuilder: (_, __) => AppUtils.kGap,
+                    itemCount: dataModel.length,
+                    itemBuilder: (_, index) => ProfileItemWidget(
+                      icon: dataModel[index].icon,
+                      title: dataModel[index].title,
+                      desc: dataModel[index].desc,
+                      onTap: () {
+                        switch (dataModel[index].index) {
+                          case 0: context.pushNamed(Routes.editProfilePage, extra: state.userMeResponse);
+                            break;
+                          case 1: context.pushNamed(Routes.historyBalansPage);
+                            break;
+                          case 2: break;
+                          case 3: break;
+                          default: break;
+                        }
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.only(bottom: 100, left: 18, right: 18),

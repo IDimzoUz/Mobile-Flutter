@@ -9,3 +9,9 @@ final class GetCategoryEvent extends HomePageEvent{
   @override
   List<Object?> get props => [ ];
 }
+
+final class GetHomeMeEvent extends HomePageEvent {
+  const GetHomeMeEvent();
+  @override
+  List<Object?> get props => [ ];
+}

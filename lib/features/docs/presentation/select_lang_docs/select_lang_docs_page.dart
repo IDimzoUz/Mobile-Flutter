@@ -19,11 +19,12 @@ class SelectLangDocsPage extends StatefulWidget {
 
 class _PageState extends State<SelectLangDocsPage> {
 
-  late int id = 0;
+  late int langId = 0;
 
   @override
   void initState() {
     super.initState();
+    print('ID LANG=${widget.id}');
     context.read<SelectLangDocsBloc>().add(GetLanguageCategoryDocsEvent(id: widget.id));
   }
 
@@ -31,7 +32,7 @@ class _PageState extends State<SelectLangDocsPage> {
     for (final element in items) {
       element.isCheck = false;
     }
-    id = items[index].id ?? 0;
+    langId = items[index].id ?? 0;
     setState(() { items[index].isCheck = !(items[index].isCheck ?? false);});
   }
 
@@ -99,9 +100,9 @@ class _PageState extends State<SelectLangDocsPage> {
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: CustomButton(
         width: double.infinity,
-        backgroundColor: (id != 0) ? AppColors.baseColor : AppColors.neutralDenger5.withOpacity(0.5),
+        backgroundColor: (langId != 0) ? AppColors.baseColor : AppColors.neutralDenger5.withOpacity(0.5),
         label: const Text('Следующий'),
-        onPressed: () => (id != 0) ? context.pushNamed(Routes.formalizationPage) : null,
+        onPressed: () => (langId != 0) ? context.pushNamed(Routes.formalizationPage, extra: langId) : null,
       ),
     ),
    )

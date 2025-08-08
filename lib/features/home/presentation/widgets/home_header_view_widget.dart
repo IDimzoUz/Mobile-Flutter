@@ -5,52 +5,22 @@ import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
+import "package:imzo/features/profile/model/user_me_response.dart";
+import "package:imzo/features/profile/presentation/widgets/me_profile_widget.dart";
 import "package:imzo/router/app_routes.dart";
 
 class HomeHeaderViewWidget extends StatelessWidget {
-  const HomeHeaderViewWidget({super.key});
+  const HomeHeaderViewWidget({super.key, this.data});
+  final UserMeResponse? data;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    onTap: () => localSource.verification ? context.pushNamed(Routes.editProfilePage) : context.pushNamed(Routes.identificationPage),
+    onTap: () => localSource.verification ? context.pushNamed(Routes.editProfilePage, extra: data) : context.pushNamed(Routes.identificationPage),
     child: Row(
       children: [
-        Container(
-          width: 50,
-          height: 50,
-          margin: const EdgeInsets.only(left: 16),
-          decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: AppUtils.kBorderRadius48,
-              border: Border.all(color: AppColors.baseColor)
-          ),
-          child: Center(
-            child: SvgPicture.asset(SvgIcons.icPerson),
-          ),
-        ),
         AppUtils.kGap8,
-        const Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                "Пользователь",
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                "Прохождение идентификации",
-                style: TextStyle(
-                  color: AppColors.orange,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+        Flexible(
+          child: MeProfileWidget(data: data),
         ),
         CustomButton(
           backgroundColor: AppColors.opacity,

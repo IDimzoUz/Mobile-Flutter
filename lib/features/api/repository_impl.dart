@@ -9,6 +9,7 @@ import "package:imzo/features/api/repository.dart";
 import "package:imzo/features/auth/data/login/login_user_response.dart";
 import "package:imzo/features/auth/data/login/otp_auth_response.dart";
 import "package:imzo/features/docs/model/contract_tem_category_response.dart";
+import "package:imzo/features/docs/model/contract_templates_response.dart";
 import "package:imzo/features/home/model/category_response.dart";
 import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
@@ -161,19 +162,29 @@ class RepositoryImpl implements Repository {
   @override
   Future<Either<Failure, UserMeResponse>> getUserMe({String? firstName, String? lastName, String? email, String? profilePhotoUrl}) async {
     try {
-      final Response response = await dio.put(
-        Constants.baseUrl + Urls.profile,
-        options: Options(headers: {
-          "Authorization": "Bearer ${localSource.accessToken}",
-        }),
-        data: {
-          "firstName": firstName,
-          "lastName": lastName,
-          "email": email,
-          "profilePhotoUrl": profilePhotoUrl
-        }
-      );
-      return Right(UserMeResponse.fromJson(response.data));
+      if (firstName == null || firstName.isEmpty) {
+        final Response response = await dio.get(
+            Constants.baseUrl + Urls.usersMe,
+            options: Options(headers: {
+              "Authorization": "Bearer ${localSource.accessToken}",
+            }),
+        );
+        return Right(UserMeResponse.fromJson(response.data));
+      } else {
+        final Response response = await dio.put(
+            Constants.baseUrl + Urls.profile,
+            options: Options(headers: {
+              "Authorization": "Bearer ${localSource.accessToken}",
+            }),
+            data: {
+              "firstName": firstName,
+              "lastName": lastName,
+              "email": email,
+              "profilePhotoUrl": profilePhotoUrl
+            }
+        );
+        return Right(UserMeResponse.fromJson(response.data));
+      }
     } on DioException catch (error, stacktrace) {
       log("Exception occurred -: $error stacktrace: $stacktrace");
       return Left(ServerError.withDioError(error: error).failure);
@@ -183,6 +194,25 @@ class RepositoryImpl implements Repository {
     }
   }
 
-
+  @override
+  Future<Either<Failure, ContractsTemplatesResponse>> getContractsTemplates({required int langId}) async {
+    try {
+      final Response response = await dio.get(
+        Constants.baseUrl + Urls.contractTemplates,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer ${localSource.accessToken}"
+          },
+        ),
+      );
+      return Right(ContractsTemplatesResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
 
 }

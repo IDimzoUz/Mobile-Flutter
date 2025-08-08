@@ -24,7 +24,7 @@ class LanCheckboxWidget extends StatelessWidget {
     decoration: BoxDecoration(
       color: const Color(0xffF4F7F4),
       borderRadius: AppUtils.kBorderRadius12,
-      border: Border.all(color: !value ? const Color(0xff007BFF).withOpacity(0.3) : AppColors.opacity)
+      border: Border.all(color: value ? const Color(0xff007BFF).withOpacity(0.3) : AppColors.opacity)
     ),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     margin: const EdgeInsets.symmetric(vertical: 5),
@@ -41,7 +41,7 @@ class LanCheckboxWidget extends StatelessWidget {
             style: context.theme.listTileTheme.leadingAndTrailingTextStyle,
           ),
           const Spacer(),
-          if (!value) SvgPicture.asset(SvgIcons.icTickSquare)
+          if (value) SvgPicture.asset(SvgIcons.icTickSquare)
         ],
       ),
     ),

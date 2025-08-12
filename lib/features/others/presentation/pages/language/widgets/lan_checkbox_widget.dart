@@ -7,7 +7,7 @@ import 'package:imzo/core/utils/utils.dart';
 
 class LanCheckboxWidget extends StatelessWidget {
   const LanCheckboxWidget({
-    required this.value,
+    this.value = false,
     required this.onTap,
     required this.title,
     required this.image,
@@ -20,17 +20,17 @@ class LanCheckboxWidget extends StatelessWidget {
   final String image;
 
   @override
-  Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(
-      color: const Color(0xffF4F7F4),
-      borderRadius: AppUtils.kBorderRadius12,
-      border: Border.all(color: value ? const Color(0xff007BFF).withOpacity(0.3) : AppColors.opacity)
-    ),
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    margin: const EdgeInsets.symmetric(vertical: 5),
-    height: 60,
-    child: InkWell(
-      onTap: onTap,
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(
+      decoration: BoxDecoration(
+        color: const Color(0xffF4F7F4),
+        borderRadius: AppUtils.kBorderRadius12,
+        border: Border.all(color: value ? const Color(0xff007BFF).withOpacity(0.3) : AppColors.opacity)
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      height: 60,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

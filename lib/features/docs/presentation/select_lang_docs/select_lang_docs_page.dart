@@ -10,6 +10,12 @@ import "package:imzo/features/docs/model/contract_tem_category_response.dart";
 import "package:imzo/features/others/presentation/pages/language/widgets/lan_checkbox_widget.dart";
 import "package:imzo/router/app_routes.dart";
 
+class ContractIDModel {
+  final int templateId;
+  final int languageCode;
+  const ContractIDModel({required this.templateId, required this.languageCode});
+}
+
 class SelectLangDocsPage extends StatefulWidget {
   const SelectLangDocsPage({super.key, required this.id});
   final int id;
@@ -102,7 +108,7 @@ class _PageState extends State<SelectLangDocsPage> {
         width: double.infinity,
         backgroundColor: (langId != 0) ? AppColors.baseColor : AppColors.neutralDenger5.withOpacity(0.5),
         label: const Text('Следующий'),
-        onPressed: () => (langId != 0) ? context.pushNamed(Routes.formalizationPage, extra: langId) : null,
+        onPressed: () => (langId != 0) ? context.pushNamed(Routes.formalizationPage, extra: ContractIDModel(templateId: widget.id, languageCode: langId)) : null,
       ),
     ),
    )

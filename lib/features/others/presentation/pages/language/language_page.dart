@@ -26,15 +26,15 @@ class LanguagePage extends StatefulWidget {
 class _PageState extends State<LanguagePage> {
 
   List<SelectLanguageData> items = [
-    SelectLanguageData("O’zbekcha", localSource.language == 'uz' ? false : true, ImagesUrl.icUz),
-    SelectLanguageData("Ўзбекча", localSource.language == 'uz' ? false : true, ImagesUrl.icUz),
-    SelectLanguageData("Qaraqalpaq", localSource.language == 'qr' ? false : true, ImagesUrl.icQr),
-    SelectLanguageData("Русские", localSource.language == 'ru' ? false : true, ImagesUrl.icRu),
-    SelectLanguageData("English", localSource.language == 'en'? false : true, ImagesUrl.icEn),
+    SelectLanguageData("O’zbekcha", localSource.language == 'uz' ? true : false, ImagesUrl.icUz),
+    SelectLanguageData("Ўзбекча", localSource.language == 'cryl' ? true : false, ImagesUrl.icUz),
+    SelectLanguageData("Qaraqalpaq", localSource.language == 'qr' ? true : false, ImagesUrl.icQr),
+    SelectLanguageData("Русские", localSource.language == 'ru' ? true : false, ImagesUrl.icRu),
+    SelectLanguageData("English", localSource.language == 'en'? true : false, ImagesUrl.icEn),
   ];
   void checked(int index) {
     for (final element in items) {
-      element.isCheck = true;
+      element.isCheck = false;
     }
     setState(() { items[index].isCheck = !items[index].isCheck;});
   }
@@ -86,20 +86,21 @@ class _PageState extends State<LanguagePage> {
               value: items[index].isCheck,
               image: items[index].icon,
               onTap: () async {
-              if(index == 0){
-                context.setLocale(const Locale('en'));
-                await localSource.setLanguage('en');
-              }else if(index == 1){
-                context.setLocale(const Locale('uz'));
-                await localSource.setLanguage('uz');
-              }else if(index == 2){
-                context.setLocale(const Locale('ru'));
-                await localSource.setLanguage('ru');
-              }
-              setState(() {
-                checked(index);
-              });
-            }, title: items[index].name,),
+                if (index == 0) {
+                  context.setLocale(const Locale('en'));
+                  await localSource.setLanguage('en');
+                } else if (index == 1) {
+                  context.setLocale(const Locale('uz'));
+                  await localSource.setLanguage('uz');
+                } else if (index == 2) {
+                  context.setLocale(const Locale('ru'));
+                  await localSource.setLanguage('ru');
+                }
+                setState(() {
+                  checked(index);
+                });
+              }, title: items[index].name
+            ),
           )
         ],
       ),

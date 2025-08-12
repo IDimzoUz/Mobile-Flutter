@@ -10,7 +10,9 @@ import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/auth/presentation/otp/otp_page.dart";
 import "package:imzo/features/auth/presentation/pages/auth_page.dart";
 import "package:imzo/features/auth/presentation/public_oferta/public_offer_page.dart";
+import "package:imzo/features/docs/blocs/create_formalization/create_formalization_bloc.dart";
 import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
+import "package:imzo/features/docs/presentation/create_formalization/create_formalization_page.dart";
 import "package:imzo/features/docs/presentation/formalization/formalization_page.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
@@ -144,9 +146,24 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
           context: context,
           state: state,
-          child: FormalizationPage(langID: state.extra! as int)
+          child: FormalizationPage(contractIDModel: state.extra! as ContractIDModel)
       ),
     ),
+
+    GoRoute(
+      path: Routes.createFormalizationPage,
+      name: Routes.createFormalizationPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: BlocProvider<CreateFormalizationBloc>(
+            create: (_) => sl<CreateFormalizationBloc>(),
+            child: CreateFormalizationPage(contractIDModel: state.extra! as ContractIDModel)
+          )
+      ),
+    ),
+
 
     GoRoute(
       path: Routes.historyBalansPage,
@@ -154,6 +171,7 @@ final GoRouter router = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       builder: (_, __) => const HistoryBalansPage(),
     ),
+
 
 
     GoRoute(

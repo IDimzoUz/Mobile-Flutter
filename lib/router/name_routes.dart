@@ -22,6 +22,7 @@ sealed class Routes { Routes._();
   static const String notificationPage = "/notificationPage";
   static const String historyDetailPage = "/historyDetailPage";
   static const String docsPage = "/docsPage";
+  static const String createFormalizationPage = "/createFormalizationPage";
 
 
   /// internet connection

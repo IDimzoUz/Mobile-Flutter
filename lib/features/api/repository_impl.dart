@@ -198,7 +198,7 @@ class RepositoryImpl implements Repository {
   Future<Either<Failure, ContractsTemplatesResponse>> getContractsTemplates({required int langId}) async {
     try {
       final Response response = await dio.get(
-        Constants.baseUrl + Urls.contractTemplates,
+        "${Constants.baseUrl}${Urls.contractTemplates}/$langId",
         options: Options(
           headers: {
             "Authorization": "Bearer ${localSource.accessToken}"

@@ -133,9 +133,7 @@ class _PageState extends State<DocsPage> with DocsMixin {
                       separatorBuilder: (_, __) => AppUtils.kGap,
                       itemCount: filteredItems.length,
                   )
-                  : const Center(
-                      child: Text('Hech nima topilmadi...', style: TextStyle(color: AppColors.grey2)),
-                    )
+                  : const Center(child: Text('Hech nima topilmadi...', style: TextStyle(color: AppColors.grey2)))
               ),
             ],
           ),

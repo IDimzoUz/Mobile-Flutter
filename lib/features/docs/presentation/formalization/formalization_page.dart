@@ -1,24 +1,29 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:go_router/go_router.dart";
 import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/extension/build_context_extension.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
+import "package:imzo/core/widgets/inputs/custom_phone_text_field.dart";
 import "package:imzo/core/widgets/inputs/custom_text_field.dart";
+import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
 import "package:imzo/features/docs/presentation/widgets/docs_item_widget.dart";
 import "package:imzo/features/others/presentation/pages/language/language_page.dart";
 import "package:imzo/features/others/presentation/pages/language/widgets/lan_checkbox_widget.dart";
 import "package:imzo/router/app_routes.dart";
 
 class FormalizationPage extends StatefulWidget {
-  const FormalizationPage({super.key, this.langID});
-  final int? langID;
+  const FormalizationPage({super.key, this.contractIDModel});
+  final ContractIDModel? contractIDModel;
   @override
   State<FormalizationPage> createState() => _PageState();
 }
 
 class _PageState extends State<FormalizationPage> {
+
+  late List<String> phoneList = [];
 
   @override
   void initState() {
@@ -119,51 +124,106 @@ class _PageState extends State<FormalizationPage> {
                     ),
                   ),
                   AppUtils.kGap12,
-                  CustomTextField(
-                    hintText: "99 123 45 67",
-                    fillColor: AppColors.baseColor.withOpacity(0.08),
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 10, top: 12),
-                      child: Text(
-                        '+998',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    cursorColor: AppColors.grey2,
-                    focusedBorder: OutlineInputBorder(
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.baseColor.withOpacity(0.08),
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.baseColor),
+                      border: Border.all(color: AppColors.baseColor)
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.baseColor),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            '+998',
+                            style: TextStyle(
+                              fontSize: 15
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: CustomPhoneTextField(
+                            hintText: "99 123 45 67",
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: AppColors.opacity),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   AppUtils.kGap12,
-                  CustomTextField(
-                    hintText: "99 123 45 67",
-                    fillColor: AppColors.baseColor.withOpacity(0.08),
-                    prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 10, top: 12),
-                      child: Text(
-                        '+998',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  if (phoneList.isNotEmpty) Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.baseColor.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.baseColor)
+                      ),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              '+998',
+                              style: TextStyle(
+                                  fontSize: 15
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: CustomPhoneTextField(
+                              hintText: "99 123 45 67",
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(color: AppColors.opacity),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    cursorColor: AppColors.grey2,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.baseColor),
+                  if (phoneList.isNotEmpty) AppUtils.kGap12,
+                  if (phoneList.length == 2) Container(
+                    decoration: BoxDecoration(
+                        color: AppColors.baseColor.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.baseColor)
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: AppColors.baseColor),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            '+998',
+                            style: TextStyle(
+                                fontSize: 15
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: CustomPhoneTextField(
+                            hintText: "99 123 45 67",
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: AppColors.opacity),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  AppUtils.kGap12,
+                  if (phoneList.length == 2) AppUtils.kGap12,
                   CustomButton(
                     width: double.infinity,
                     backgroundColor: AppColors.baseColor.withOpacity(0.08),
+                    onPressed: () {
+                      if (phoneList.isEmpty || phoneList.length == 1) {
+                        phoneList.add('Phone ${phoneList.length}');
+                        print("PJN ${phoneList.length}");
+                      }
+                      setState(() {});
+                    },
                     label: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -175,7 +235,7 @@ class _PageState extends State<FormalizationPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -183,11 +243,12 @@ class _PageState extends State<FormalizationPage> {
         )
       ],
     ),
-    bottomNavigationBar: const Padding(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+    bottomNavigationBar: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: CustomButton(
+        onPressed: () => context.pushNamed(Routes.createFormalizationPage, extra: widget.contractIDModel),
         width: double.infinity,
-        label: Text('Отправить'),
+        label: const Text('Отправить'),
       ),
     ),
   );

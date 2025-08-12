@@ -96,7 +96,6 @@ class _AuthPageState extends State<AuthPage> with AuthMixin {
                               onChanged: (value) {
                                 setState(() {});
                               },
-
                               errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Colors.red)),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),

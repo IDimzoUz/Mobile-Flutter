@@ -11,9 +11,12 @@ import "package:imzo/features/others/presentation/pages/language/widgets/lan_che
 import "package:imzo/router/app_routes.dart";
 
 class ContractIDModel {
-  final int templateId;
-  final int languageCode;
-  const ContractIDModel({required this.templateId, required this.languageCode});
+  int templateId;
+  int languageCode;
+  String language;
+  String? passportID;
+  String? dateBirthDay;
+  ContractIDModel({required this.templateId, required this.languageCode, this.dateBirthDay, this.passportID, required this.language});
 }
 
 class SelectLangDocsPage extends StatefulWidget {
@@ -26,6 +29,7 @@ class SelectLangDocsPage extends StatefulWidget {
 class _PageState extends State<SelectLangDocsPage> {
 
   late int langId = 0;
+  late String lang = "";
 
   @override
   void initState() {
@@ -39,7 +43,8 @@ class _PageState extends State<SelectLangDocsPage> {
       element.isCheck = false;
     }
     langId = items[index].id ?? 0;
-    setState(() { items[index].isCheck = !(items[index].isCheck ?? false);});
+    lang = items[index].availableLanguages?.first ?? "";
+    setState(() { items[index].isCheck = !(items[index].isCheck ?? false); });
   }
 
   String setImageLang(ContractTemplatesCategoryResponse data) {
@@ -108,7 +113,7 @@ class _PageState extends State<SelectLangDocsPage> {
         width: double.infinity,
         backgroundColor: (langId != 0) ? AppColors.baseColor : AppColors.neutralDenger5.withOpacity(0.5),
         label: const Text('Следующий'),
-        onPressed: () => (langId != 0) ? context.pushNamed(Routes.formalizationPage, extra: ContractIDModel(templateId: widget.id, languageCode: langId)) : null,
+        onPressed: () => (langId != 0) ? context.pushNamed(Routes.formalizationPage, extra: ContractIDModel(language: lang, templateId: widget.id, languageCode: langId)) : null,
       ),
     ),
    )

@@ -1,30 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
-import 'package:imzo/constants/image_constants.dart';
 import 'package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart';
 import 'package:imzo/core/extension/custom_snackbar/top_snack_bar.dart';
 import 'package:imzo/core/utils/app_colors.dart';
 import 'package:imzo/core/utils/utils.dart';
-import 'package:imzo/core/widgets/inputs/custom_text_field.dart';
 import 'package:imzo/features/docs/model/contract_templates_response.dart';
-import 'package:intl/intl.dart';
+import 'package:imzo/features/docs/presentation/create_formalization/widgets/options_checkbox_widget.dart';
 
-class DescriptionTextFieldItemWidget extends StatefulWidget {
-  const DescriptionTextFieldItemWidget({super.key, this.fields});
+class CheckboxItemWidget extends StatefulWidget {
+  const CheckboxItemWidget({super.key, this.fields});
   final Fields? fields;
   @override
-  State<DescriptionTextFieldItemWidget> createState() => DescriptionTextFieldState();
+  State<CheckboxItemWidget> createState() => CheckboxItemState();
 }
 
-class DescriptionTextFieldState extends State<DescriptionTextFieldItemWidget> {
+class CheckboxItemState extends State<CheckboxItemWidget> {
 
-  final TextEditingController _controller = TextEditingController();
   bool _isError = false;
+  String selectOptions = "";
+  List<OptionsItem> dataOptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.fields?.options?.isNotEmpty ?? false) {
+      for (final element in widget.fields?.options ?? []) {
+        dataOptions.add(OptionsItem(name: element));
+      }
+    }
+
+  }
+
+  void checked(int index) {
+    for (final element in dataOptions) {
+      element.selectIndex = false;
+    }
+    selectOptions = dataOptions[index].name ?? "";
+    _isError = false;
+    setState(() { dataOptions[index].selectIndex = !(dataOptions[index].selectIndex); });
+  }
 
   void validate() {
-    if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
+    if ((widget.fields?.required ?? false) && selectOptions.isEmpty) {
       setState(() {
         _isError = true;
         showTopSnackBar(
@@ -32,7 +48,7 @@ class DescriptionTextFieldState extends State<DescriptionTextFieldItemWidget> {
           CustomSnackBar.error(
             boxShadow: const [ BoxShadow(color: AppColors.grey2, blurRadius: 2, offset: Offset(0, 0)) ],
             icon: const Icon(Icons.close, color: AppColors.red,),
-            message: "${widget.fields?.name}ni kiritmadiz!",
+            message: "${widget.fields?.name}",
           ),
         );
       });
@@ -71,26 +87,17 @@ class DescriptionTextFieldState extends State<DescriptionTextFieldItemWidget> {
         ],
       ),
       AppUtils.kGap8,
-      CustomTextField(
-        hintText: widget.fields?.placeholder ?? "",
-        fillColor: AppColors.white,
-        maxLines: 5,
-        controller: _controller,
-        cursorColor: AppColors.baseColor,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.baseColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: _isError ? AppColors.red : AppColors.baseColor),
-        ),
-        onChanged: (_) {
-          if (_isError) {
-            setState(() {
-              _isError = false;
-            });
-          }
+      ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: dataOptions.length,
+        itemBuilder: (_, index) {
+          return OptionsCheckboxWidget(
+            onTap: () => checked(index),
+            title: dataOptions[index].name ?? "",
+            value: dataOptions[index].selectIndex,
+            borderColor: _isError ? AppColors.red : AppColors.baseColor,
+          );
         },
       ),
       AppUtils.kGap8,

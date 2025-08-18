@@ -1,45 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
-import 'package:imzo/constants/image_constants.dart';
 import 'package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart';
 import 'package:imzo/core/extension/custom_snackbar/top_snack_bar.dart';
 import 'package:imzo/core/utils/app_colors.dart';
 import 'package:imzo/core/utils/utils.dart';
 import 'package:imzo/core/widgets/inputs/custom_text_field.dart';
 import 'package:imzo/features/docs/model/contract_templates_response.dart';
-import 'package:intl/intl.dart';
 
 class MoneyTextFieldItemWidget extends StatefulWidget {
-  const MoneyTextFieldItemWidget({super.key, this.fields, this.initialValue});
+  const MoneyTextFieldItemWidget({super.key, this.fields, required this.data});
   final Fields? fields;
-  final String? initialValue;
+  final Function(String dataText) data;
   @override
   State<MoneyTextFieldItemWidget> createState() => MoneyTextFieldItemWidgetState();
 }
 
 class MoneyTextFieldItemWidgetState extends State<MoneyTextFieldItemWidget> {
 
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller = TextEditingController();
   bool _isError = false;
 
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose(); // Muhim: Controller ni tozalash
+  }
+
   void validate() {
-    if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
-      setState(() {
-        _isError = true;
-        showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.error(
-            icon: const Icon(Icons.close, color: AppColors.red,),
-            message: "${widget.fields?.name}ni kiritmadiz!",
-          ),
-        );
-      });
+    final currentText = _controller.text; // Qiymatni oldin saqlab olamiz
+    if ((widget.fields?.required ?? false) && currentText.trim().isEmpty) {
+      setState(() => _isError = true);
+      showTopSnackBar(
+        Overlay.of(context),
+        CustomSnackBar.error(
+          boxShadow: const [BoxShadow(color: AppColors.grey2, blurRadius: 2, offset: Offset(0, 0))],
+          icon: const Icon(Icons.close, color: AppColors.red,),
+          message: "${widget.fields?.name}ni kiritmadiz!",
+        ),
+      );
     } else {
-      setState(() {
-        _isError = false;
-      });
+      setState(() => _isError = false);
+      widget.data(currentText);
     }
   }
 
@@ -72,14 +72,14 @@ class MoneyTextFieldItemWidgetState extends State<MoneyTextFieldItemWidget> {
       ),
       AppUtils.kGap8,
       CustomTextField(
+        controller: _controller,
         hintText: widget.fields?.placeholder ?? "",
         fillColor: AppColors.white,
-        controller: _controller,
         textInputType: TextInputType.number,
         cursorColor: AppColors.baseColor,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.baseColor),
+          borderSide: const BorderSide(color: AppColors.baseColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

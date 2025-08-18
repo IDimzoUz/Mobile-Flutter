@@ -8,6 +8,7 @@ import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/core/widgets/inputs/custom_phone_text_field.dart";
 import "package:imzo/core/widgets/inputs/custom_text_field.dart";
+import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/docs/blocs/create_formalization/create_formalization_bloc.dart";
 import "package:imzo/features/docs/model/contract_templates_response.dart";
 import "package:imzo/features/docs/presentation/create_formalization/widgets/sum_item_widget.dart";
@@ -27,73 +28,105 @@ class CreateFormalizationPage extends StatefulWidget {
 class _PageState extends State<CreateFormalizationPage> {
 
   final List<GlobalKey<SumItemWidgetState>> sumItemKeys = [];
+  final List<Map<String, String>> fieldValue = []; // umumiy map
+  final Map<String, String> resultField = {};
+  late ContractsTemplatesResponse? contractsTemplatesResponse = ContractsTemplatesResponse();
 
   @override
   void initState() {
     super.initState();
+    print('AAA => ${widget.contractIDModel?.dateBirthDay} ${widget.contractIDModel?.passportID}');
     context.read<CreateFormalizationBloc>().add(GetContractsTemplatesEvent(langId: widget.contractIDModel?.languageCode ?? 0));
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<CreateFormalizationBloc, CreateFormalizationState>(
-    buildWhen: (p, n) => p.contractsTemplatesResponse != n.contractsTemplatesResponse,
-    builder: (context, state) => Scaffold(
-      appBar: AppBar(
-        title: Text(
-          state.contractsTemplatesResponse?.name ?? "",
-          style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14
+  Widget build(BuildContext context) => BlocListener<CreateFormalizationBloc, CreateFormalizationState>(
+    listener: (BuildContext context, CreateFormalizationState state) async {
+      if (state.contractsTemplatesResponse != null) {
+        contractsTemplatesResponse = state.contractsTemplatesResponse;
+      }
+      if (state.createContractsResponse != null) {
+        print("SUCCESS:");
+      }
+    },
+    listenWhen: (CreateFormalizationState p, CreateFormalizationState c) => p.status != c.status || p.contractsTemplatesResponse != c.contractsTemplatesResponse || p.createContractsResponse != c.createContractsResponse,
+    child: BlocBuilder<CreateFormalizationBloc, CreateFormalizationState>(
+    buildWhen: (p, n) => p.contractsTemplatesResponse != n.contractsTemplatesResponse || p.createContractsResponse != n.createContractsResponse,
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            state.contractsTemplatesResponse?.name ?? "",
+            style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14
+            ),
           ),
+          backgroundColor: AppColors.baseColor.withOpacity(0.08),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.info_outlined),
+            )
+          ],
         ),
-        backgroundColor: AppColors.baseColor.withOpacity(0.08),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.info_outlined),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            height: 10,
+        body: Column(
+          children: [
+            Container(
+              height: 10,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.baseColor.withOpacity(0.08),
+                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16))
+              ),
+            ),
+            Flexible(
+              child: ListView.separated(
+                itemBuilder: (_, index) {
+                  late List<Sections>? sections = contractsTemplatesResponse?.translations?[0].sections;
+                  sections?.sort((a, b) => a.orderIndex?.compareTo(b.orderIndex ?? 0) ?? 0);
+                  final key = GlobalKey<SumItemWidgetState>();
+                  sumItemKeys.add(key);
+                  return SumItemWidget(
+                    key: key,
+                    dataSections: sections?[index],
+                    dataReturn: (dataReturn) {
+                      fieldValue.add(dataReturn);
+                      for (var item in fieldValue) {
+                        resultField.addAll(item);
+                      }
+                      print({"fieldValues": resultField});
+                    },
+                  );
+                },
+                separatorBuilder: (_, __) => AppUtils.kGap,
+                itemCount: contractsTemplatesResponse?.translations?[0].sections?.length ?? 0,
+              ),
+            )
+          ],
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: CustomButton(
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.baseColor.withOpacity(0.08),
-              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16))
-            ),
-          ),
-          Flexible(
-            child: ListView.separated(
-              itemBuilder: (_, index) {
-                late List<Sections>? sections = state.contractsTemplatesResponse?.translations?[0].sections;
-                sections?.sort((a, b) => a.orderIndex?.compareTo(b.orderIndex ?? 0) ?? 0);
-                final key = GlobalKey<SumItemWidgetState>();
-                sumItemKeys.add(key);
-                return SumItemWidget(
-                  key: key,
-                  dataSections: sections?[index]
+            label: const Text('Следующий'),
+            onPressed: () {
+              for (var key in sumItemKeys) {
+                key.currentState?.validateAll();
+              }
+              if (widget.contractIDModel != null) {
+                late ContractIDModel data = ContractIDModel(
+                  templateId: contractsTemplatesResponse?.id ?? 0,
+                  languageCode: widget.contractIDModel?.languageCode ?? 0,
+                  language: widget.contractIDModel?.language ?? "",
+                  dateBirthDay: widget.contractIDModel?.dateBirthDay ?? "",
+                  passportID: widget.contractIDModel?.passportID ?? ""
                 );
-              },
-              separatorBuilder: (_, __) => AppUtils.kGap,
-              itemCount: state.contractsTemplatesResponse?.translations?[0].sections?.length ?? 0,
-            ),
-          )
-        ],
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        child: CustomButton(
-          width: double.infinity,
-          label: const Text('Следующий'),
-          onPressed: () {
-            for (var key in sumItemKeys) {
-              key.currentState?.validateAll();
-            }
-          },
+                context.read<CreateFormalizationBloc>().add(CreateContractsEvent(contractIDModel: data, fieldValues: resultField));
+              }
+            },
+          ),
         ),
-      ),
-    )
+      )
+     )
   );
 }

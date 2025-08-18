@@ -12,33 +12,32 @@ import 'package:imzo/features/docs/model/contract_templates_response.dart';
 import 'package:intl/intl.dart';
 
 class DocumentIdTextFieldItemWidget extends StatefulWidget {
-  const DocumentIdTextFieldItemWidget({super.key, this.fields});
+  const DocumentIdTextFieldItemWidget({super.key, this.fields, required this.data});
   final Fields? fields;
+  final Function(String dataText) data;
   @override
-  State<DocumentIdTextFieldItemWidget> createState() => _PageState();
+  State<DocumentIdTextFieldItemWidget> createState() => DocumentIdTextFieldItemState();
 }
 
-class _PageState extends State<DocumentIdTextFieldItemWidget> {
+class DocumentIdTextFieldItemState extends State<DocumentIdTextFieldItemWidget> {
 
   final TextEditingController _controller = TextEditingController();
   bool _isError = false;
 
   void validate() {
     if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
-      setState(() {
-        _isError = true;
-        showTopSnackBar(
-          Overlay.of(context),
-          CustomSnackBar.error(
-            icon: const Icon(Icons.close, color: AppColors.red,),
-            message: "${widget.fields?.name}ni kiritmadiz!",
-          ),
-        );
-      });
+      setState(() => _isError = true);
+      showTopSnackBar(
+        Overlay.of(context),
+        CustomSnackBar.error(
+          boxShadow: const [ BoxShadow(color: AppColors.grey2, blurRadius: 2, offset: Offset(0, 0)) ],
+          icon: const Icon(Icons.close, color: AppColors.red,),
+          message: "${widget.fields?.name}ni kiritmadiz!",
+        ),
+      );
     } else {
-      setState(() {
-        _isError = false;
-      });
+      setState(() => _isError = false);
+      widget.data(_controller.text);
     }
   }
 
@@ -81,7 +80,7 @@ class _PageState extends State<DocumentIdTextFieldItemWidget> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.baseColor),
+          borderSide: BorderSide(color: _isError ? AppColors.red : AppColors.baseColor),
         ),
         onChanged: (_) {
           if (_isError) {

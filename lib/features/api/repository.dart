@@ -3,6 +3,8 @@ import 'package:imzo/features/auth/data/login/login_user_response.dart';
 import 'package:imzo/features/auth/data/login/otp_auth_response.dart';
 import 'package:imzo/features/docs/model/contract_tem_category_response.dart';
 import 'package:imzo/features/docs/model/contract_templates_response.dart';
+import 'package:imzo/features/docs/model/create_contracts_response.dart';
+import 'package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart';
 import 'package:imzo/features/home/model/category_response.dart';
 import 'package:imzo/features/profile/model/my_id_access_token_response.dart';
 import 'package:imzo/features/profile/model/my_id_me_response.dart';
@@ -18,6 +20,8 @@ const Repository();
   Future<Either<Failure, ContractsTemplatesResponse>> getContractsTemplates({required int langId});
   Future<Either<Failure, List<ContractTemplatesCategoryResponse>>> getContractTemplatesCategory({required int id});
   Future<Either<Failure, UserMeResponse>> getUserMe({String? firstName, String? lastName, String? email, String? profilePhotoUrl});
+  Future<Either<Failure, CreateContractsResponse>> createFormalization({required ContractIDModel contractIDModel, required Map<String, String> fieldValues});
+
 
   // Mark: MyID Apis
   Future<Either<Failure, MyIDAccessTokenResponse>> getMyIDToken({required String code});

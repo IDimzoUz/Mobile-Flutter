@@ -3,6 +3,8 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
 import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/extension/build_context_extension.dart";
+import "package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart";
+import "package:imzo/core/extension/custom_snackbar/top_snack_bar.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
@@ -23,12 +25,21 @@ class FormalizationPage extends StatefulWidget {
 
 class _PageState extends State<FormalizationPage> {
 
+  final TextEditingController _controllerPassportID = TextEditingController();
+  final TextEditingController _controllerBirthday = TextEditingController();
+  final TextEditingController _controllerPhoneNumber = TextEditingController();
   late List<String> phoneList = [];
 
-  @override
-  void initState() {
-    super.initState();
-
+  String returnErrorText() {
+    if (_controllerPassportID.text.isEmpty) {
+      return "Passport ID raqamini kiriting.";
+    } else if (_controllerBirthday.text.isEmpty) {
+      return "Tug'ilgan sanani kiriting.";
+    } else if (_controllerPhoneNumber.text.isEmpty || _controllerPhoneNumber.text.length != 12) {
+      return _controllerPhoneNumber.text.isEmpty ? "Telefon raqamni kiriting." : "Telefon raqamni to'liq kiriting.";
+    } else {
+      return "";
+    }
   }
 
   @override
@@ -85,6 +96,7 @@ class _PageState extends State<FormalizationPage> {
                   AppUtils.kGap16,
                   CustomTextField(
                     hintText: "AD12312323",
+                    controller: _controllerPassportID,
                     fillColor: AppColors.baseColor.withOpacity(0.08),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(9.0),
@@ -103,6 +115,7 @@ class _PageState extends State<FormalizationPage> {
                   AppUtils.kGap12,
                   CustomTextField(
                     hintText: "12.12.2025",
+                    controller: _controllerBirthday,
                     fillColor: AppColors.baseColor.withOpacity(0.08),
                     suffixIcon: const Icon(Icons.calendar_today_rounded, color: AppColors.baseColor),
                     cursorColor: AppColors.grey2,
@@ -135,7 +148,7 @@ class _PageState extends State<FormalizationPage> {
                         const Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            '+998',
+                            '+998*',
                             style: TextStyle(
                               fontSize: 15
                             ),
@@ -144,6 +157,7 @@ class _PageState extends State<FormalizationPage> {
                         Flexible(
                           child: CustomPhoneTextField(
                             hintText: "99 123 45 67",
+                            controller: _controllerPhoneNumber,
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: const BorderSide(color: AppColors.opacity),
@@ -165,7 +179,7 @@ class _PageState extends State<FormalizationPage> {
                           const Padding(
                             padding: EdgeInsets.only(left: 10),
                             child: Text(
-                              '+998',
+                              '+998 ',
                               style: TextStyle(
                                   fontSize: 15
                               ),
@@ -195,7 +209,7 @@ class _PageState extends State<FormalizationPage> {
                         const Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
-                            '+998',
+                            '+998 ',
                             style: TextStyle(
                                 fontSize: 15
                             ),
@@ -220,7 +234,6 @@ class _PageState extends State<FormalizationPage> {
                     onPressed: () {
                       if (phoneList.isEmpty || phoneList.length == 1) {
                         phoneList.add('Phone ${phoneList.length}');
-                        print("PJN ${phoneList.length}");
                       }
                       setState(() {});
                     },
@@ -246,7 +259,23 @@ class _PageState extends State<FormalizationPage> {
     bottomNavigationBar: Padding(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: CustomButton(
-        onPressed: () => context.pushNamed(Routes.createFormalizationPage, extra: widget.contractIDModel),
+        onPressed: () {
+          if (_controllerPassportID.text.isNotEmpty && _controllerBirthday.text.isNotEmpty && _controllerPhoneNumber.text.isNotEmpty && _controllerPhoneNumber.text.length == 12) {
+            widget.contractIDModel?.passportID = _controllerPassportID.text;
+            widget.contractIDModel?.dateBirthDay = _controllerBirthday.text;
+            context.pushNamed(Routes.createFormalizationPage, extra: widget.contractIDModel);
+            print("${_controllerPhoneNumber.text.length} ${_controllerPhoneNumber.text}");
+          } else {
+            showTopSnackBar(
+              Overlay.of(context),
+              CustomSnackBar.error(
+                boxShadow: const [BoxShadow(color: AppColors.grey2, blurRadius: 2, offset: Offset(0, 0))],
+                icon: const Icon(Icons.close, color: AppColors.red,),
+                message: returnErrorText(),
+              ),
+            );
+          }
+        },
         width: double.infinity,
         label: const Text('Отправить'),
       ),

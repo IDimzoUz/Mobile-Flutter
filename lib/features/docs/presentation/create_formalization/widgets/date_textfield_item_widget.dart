@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:imzo/constants/image_constants.dart';
+import 'package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart';
+import 'package:imzo/core/extension/custom_snackbar/top_snack_bar.dart';
 import 'package:imzo/core/utils/app_colors.dart';
 import 'package:imzo/core/utils/utils.dart';
 import 'package:imzo/core/widgets/inputs/custom_text_field.dart';
@@ -10,14 +12,43 @@ import 'package:imzo/features/docs/model/contract_templates_response.dart';
 import 'package:intl/intl.dart';
 
 class DateTextFieldItemWidget extends StatefulWidget {
-  const DateTextFieldItemWidget({super.key, this.fields});
+  const DateTextFieldItemWidget({super.key, this.fields, required this.data});
   final Fields? fields;
+  final Function(String dataText) data;
   @override
-  State<DateTextFieldItemWidget> createState() => _PageState();
+  State<DateTextFieldItemWidget> createState() => DateTextFieldItemState();
 }
 
-class _PageState extends State<DateTextFieldItemWidget> {
+class DateTextFieldItemState extends State<DateTextFieldItemWidget> {
 
+  final TextEditingController _controller = TextEditingController();
+  bool _isError = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose(); // Muhim: Controller ni tozalash
+  }
+
+  void validate() {
+    if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
+      setState(() {
+        _isError = true;
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.error(
+            boxShadow: const [ BoxShadow(color: AppColors.grey2, blurRadius: 2, offset: Offset(0, 0)) ],
+            icon: const Icon(Icons.close, color: AppColors.red,),
+            message: "${widget.fields?.name}ni kiritmadiz!",
+          ),
+        );
+      });
+    } else {
+      setState(() => _isError = false);
+      print(_controller.text);
+      widget.data(_controller.text);
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Column(
@@ -51,6 +82,7 @@ class _PageState extends State<DateTextFieldItemWidget> {
         hintText: widget.fields?.placeholder ?? "",
         fillColor: AppColors.white,
         cursorColor: AppColors.baseColor,
+        controller: _controller,
         suffixIcon: Padding(
           padding: const EdgeInsets.all(10),
           child: SvgPicture.asset(SvgIcons.icCalendarMini),
@@ -61,8 +93,15 @@ class _PageState extends State<DateTextFieldItemWidget> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.baseColor),
+          borderSide: BorderSide(color: _isError ? AppColors.red : AppColors.baseColor),
         ),
+        onChanged: (_) {
+          if (_isError) {
+            setState(() {
+              _isError = false;
+            });
+          }
+        },
       ),
       AppUtils.kGap8,
     ],

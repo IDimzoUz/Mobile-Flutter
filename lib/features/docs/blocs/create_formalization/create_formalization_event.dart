@@ -10,3 +10,11 @@ final class GetContractsTemplatesEvent extends CreateFormalizationEvent {
   @override
   List<Object?> get props => [ langId ];
 }
+
+final class CreateContractsEvent extends CreateFormalizationEvent {
+  const CreateContractsEvent({required this.contractIDModel, required this.fieldValues});
+  final ContractIDModel contractIDModel;
+  final Map<String, String> fieldValues;
+  @override
+  List<Object?> get props => [ contractIDModel, fieldValues ];
+}

@@ -41,13 +41,14 @@ class Translations {
   String? createdAt;
   String? updatedAt;
 
-  Translations(
-      {this.id,
-        this.languageCode,
-        this.content,
-        this.sections,
-        this.createdAt,
-        this.updatedAt});
+  Translations({
+    this.id,
+    this.languageCode,
+    this.content,
+    this.sections,
+    this.createdAt,
+    this.updatedAt
+  });
 
   Translations.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -125,21 +126,22 @@ class Fields {
   String? placeholder;
   String? helpText;
 
-  Fields(
-      {this.id,
-        this.name,
-        this.fieldId,
-        this.fieldType,
-        this.required,
-        this.minValue,
-        this.maxValue,
-        this.minLength,
-        this.maxLength,
-        this.pattern,
-        this.options,
-        this.orderIndex,
-        this.placeholder,
-        this.helpText});
+  Fields({
+    this.id,
+    this.name,
+    this.fieldId,
+    this.fieldType,
+    this.required,
+    this.minValue,
+    this.maxValue,
+    this.minLength,
+    this.maxLength,
+    this.pattern,
+    this.options,
+    this.orderIndex,
+    this.placeholder,
+    this.helpText
+  });
 
   Fields.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -176,4 +178,11 @@ class Fields {
     data['helpText'] = helpText;
     return data;
   }
+
+}
+
+class OptionsItem {
+  String? name;
+  bool selectIndex = false;
+  OptionsItem({this.name, this.selectIndex = false});
 }

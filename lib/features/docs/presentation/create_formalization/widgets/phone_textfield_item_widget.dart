@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:imzo/constants/image_constants.dart';
+import 'package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart';
+import 'package:imzo/core/extension/custom_snackbar/top_snack_bar.dart';
 import 'package:imzo/core/utils/app_colors.dart';
 import 'package:imzo/core/utils/utils.dart';
 import 'package:imzo/core/widgets/inputs/custom_phone_text_field.dart';
@@ -14,11 +16,33 @@ class PhoneTextFieldItemWidget extends StatefulWidget {
   const PhoneTextFieldItemWidget({super.key, this.fields});
   final Fields? fields;
   @override
-  State<PhoneTextFieldItemWidget> createState() => _PageState();
+  State<PhoneTextFieldItemWidget> createState() => PhoneTextFieldItemState();
 }
 
-class _PageState extends State<PhoneTextFieldItemWidget> {
+class PhoneTextFieldItemState extends State<PhoneTextFieldItemWidget> {
 
+  final TextEditingController _controller = TextEditingController();
+  bool _isError = false;
+
+  void validate() {
+    if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
+      setState(() {
+        _isError = true;
+        showTopSnackBar(
+          Overlay.of(context),
+          CustomSnackBar.error(
+            boxShadow: const [BoxShadow(color: AppColors.grey2, blurRadius: 2, offset: Offset(0, 0))],
+            icon: const Icon(Icons.close, color: AppColors.red,),
+            message: "${widget.fields?.name}ni kiritmadiz!",
+          ),
+        );
+      });
+    } else {
+      setState(() {
+        _isError = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Column(
@@ -52,7 +76,7 @@ class _PageState extends State<PhoneTextFieldItemWidget> {
         decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.baseColor)
+            border: Border.all(color: _isError ? AppColors.red : AppColors.baseColor)
         ),
         child: Row(
           children: [
@@ -70,14 +94,22 @@ class _PageState extends State<PhoneTextFieldItemWidget> {
               child: CustomPhoneTextField(
                 hintText: "99 123 45 67",
                 fillColor: AppColors.white,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: AppColors.opacity),
-                ),
+                controller: _controller,
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(color: AppColors.opacity),
                 ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(color: AppColors.opacity),
+                ),
+                onChanged: (_) {
+                  if (_isError) {
+                    setState(() {
+                      _isError = false;
+                    });
+                  }
+                },
               ),
             ),
           ],

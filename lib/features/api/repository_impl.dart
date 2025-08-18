@@ -10,6 +10,8 @@ import "package:imzo/features/auth/data/login/login_user_response.dart";
 import "package:imzo/features/auth/data/login/otp_auth_response.dart";
 import "package:imzo/features/docs/model/contract_tem_category_response.dart";
 import "package:imzo/features/docs/model/contract_templates_response.dart";
+import "package:imzo/features/docs/model/create_contracts_response.dart";
+import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
 import "package:imzo/features/home/model/category_response.dart";
 import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
@@ -214,5 +216,37 @@ class RepositoryImpl implements Repository {
       return Left(ServerError.withError(message: error.toString()).failure);
     }
   }
+
+
+
+  @override
+  Future<Either<Failure, CreateContractsResponse>> createFormalization({required ContractIDModel contractIDModel, required Map<String, String> fieldValues }) async {
+    try {
+      final Response response = await dio.post(
+        "${Constants.baseUrl}${Urls.usersContracts}/${contractIDModel.templateId}/${contractIDModel.language}",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer ${localSource.accessToken}"
+          },
+        ),
+        data: {
+          "fieldValues": fieldValues,
+          "recipientDocumentId": contractIDModel.passportID,
+          "recipientBirthDate": contractIDModel.dateBirthDay
+        }
+      );
+      return Right(CreateContractsResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+
+
 
 }

@@ -30,18 +30,25 @@ class LanCheckboxWidget extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       margin: const EdgeInsets.symmetric(vertical: 5),
-      height: 60,
+      // height: 60,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(image, width: 28, height: 28),
           AppUtils.kGap12,
-          Text(
-            title,
-            style: context.theme.listTileTheme.leadingAndTrailingTextStyle,
+          Flexible(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: context.theme.listTileTheme.leadingAndTrailingTextStyle,
+                  ),
+                ),
+                if (value) SvgPicture.asset(SvgIcons.icTickSquare)
+              ],
+            ),
           ),
-          const Spacer(),
-          if (value) SvgPicture.asset(SvgIcons.icTickSquare)
         ],
       ),
     ),

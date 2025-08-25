@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
-import 'package:imzo/constants/image_constants.dart';
 import 'package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart';
 import 'package:imzo/core/extension/custom_snackbar/top_snack_bar.dart';
 import 'package:imzo/core/utils/app_colors.dart';
 import 'package:imzo/core/utils/utils.dart';
 import 'package:imzo/core/widgets/inputs/custom_text_field.dart';
 import 'package:imzo/features/docs/model/contract_templates_response.dart';
-import 'package:intl/intl.dart';
 
 class DocumentIdTextFieldItemWidget extends StatefulWidget {
   const DocumentIdTextFieldItemWidget({super.key, this.fields, required this.data});
@@ -27,6 +22,7 @@ class DocumentIdTextFieldItemState extends State<DocumentIdTextFieldItemWidget> 
   void validate() {
     if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
       setState(() => _isError = true);
+      _isError = true;
       showTopSnackBar(
         Overlay.of(context),
         CustomSnackBar.error(
@@ -36,6 +32,7 @@ class DocumentIdTextFieldItemState extends State<DocumentIdTextFieldItemWidget> 
         ),
       );
     } else {
+      _isError = false;
       setState(() => _isError = false);
       widget.data(_controller.text);
     }

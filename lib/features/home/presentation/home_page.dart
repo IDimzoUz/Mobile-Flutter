@@ -1,4 +1,5 @@
 
+import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:imzo/core/utils/app_colors.dart";
@@ -10,6 +11,8 @@ import "package:imzo/features/home/presentation/widgets/category_item_widget.dar
 import "package:imzo/features/home/presentation/widgets/home_header_view_widget.dart";
 import "package:imzo/features/home/presentation/widgets/home_item_widget.dart";
 import "package:imzo/features/home/presentation/widgets/home_stories_widget.dart";
+import "package:imzo/firebase_options.dart";
+import "package:imzo/router/app_routes.dart";
 import "package:widget_lifecycle/widget_lifecycle.dart";
 
 class HomePage extends StatefulWidget {
@@ -36,6 +39,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
           categoryResponse = state.categoryResponse!;
         }
         if (state.userMeResponse != null) {
+          localSource.setVerification(value: state.userMeResponse?.firstName != null);
           userMeResponse = state.userMeResponse!;
         }
         setState(() {});

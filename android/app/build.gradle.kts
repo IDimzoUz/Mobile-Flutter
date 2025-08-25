@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+//    id("com.google.gms.google-services")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
@@ -7,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.idimzo.imzo"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -24,7 +25,7 @@ android {
         applicationId = "com.idimzo.imzo"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -37,6 +38,15 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+//    dependencies {
+//        implementation 'com.android.support:appcompat-v7:33.0.0'
+//        implementation platform('com.google.firebase:firebase-bom:33.13.0')
+//        implementation 'com.google.firebase:firebase-analytics'
+//        implementation 'com.google.firebase:firebase-messaging'
+//        implementation "com.google.code.gson:gson:2.11.0"
+//        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+//    }
 }
 
 flutter {

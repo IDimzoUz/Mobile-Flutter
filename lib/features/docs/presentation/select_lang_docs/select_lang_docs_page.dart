@@ -16,7 +16,19 @@ class ContractIDModel {
   String language;
   String? passportID;
   String? dateBirthDay;
-  ContractIDModel({required this.templateId, required this.languageCode, this.dateBirthDay, this.passportID, required this.language});
+  String? recipientPhoneNumber;
+  String? recipientPhoneNumber2;
+  String? recipientPhoneNumber3;
+  ContractIDModel({
+    required this.templateId,
+    required this.languageCode,
+    this.dateBirthDay,
+    this.passportID,
+    required this.language,
+    this.recipientPhoneNumber,
+    this.recipientPhoneNumber2,
+    this.recipientPhoneNumber3,
+  });
 }
 
 class SelectLangDocsPage extends StatefulWidget {

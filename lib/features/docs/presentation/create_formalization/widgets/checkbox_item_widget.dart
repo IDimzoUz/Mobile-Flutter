@@ -7,8 +7,9 @@ import 'package:imzo/features/docs/model/contract_templates_response.dart';
 import 'package:imzo/features/docs/presentation/create_formalization/widgets/options_checkbox_widget.dart';
 
 class CheckboxItemWidget extends StatefulWidget {
-  const CheckboxItemWidget({super.key, this.fields});
+  const CheckboxItemWidget({super.key, this.fields, required this.data});
   final Fields? fields;
+  final Function(String dataText) data;
   @override
   State<CheckboxItemWidget> createState() => CheckboxItemState();
 }
@@ -36,6 +37,7 @@ class CheckboxItemState extends State<CheckboxItemWidget> {
     }
     selectOptions = dataOptions[index].name ?? "";
     _isError = false;
+    widget.data(dataOptions[index].name ?? "");
     setState(() { dataOptions[index].selectIndex = !(dataOptions[index].selectIndex); });
   }
 

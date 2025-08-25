@@ -3,6 +3,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:imzo/core/error/failure.dart";
 import "package:imzo/features/api/repository.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
+import "package:imzo/features/profile/model/edit_me_response.dart";
 import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
 import "package:imzo/features/profile/model/user_me_response.dart";
@@ -46,7 +47,7 @@ class IdentificationBloc extends Bloc<IdentificationEvent, IdentificationState> 
 
   Future<void> _getUserMe(EditProfileEvent event, Emitter<IdentificationState> emit) async {
     emit(const IdentificationState(status: ApiStatus.loading));
-    final result = await repository.getUserMe(firstName: event.firstName, lastName: event.lastName, email: event.email, profilePhotoUrl: event.profilePhotoUrl);
+    final result = await repository.getUserMe(edit: event.editData);
     await result.fold(
           (Failure left) { emit(const IdentificationState(status: ApiStatus.error)); },
           (UserMeResponse right) async {

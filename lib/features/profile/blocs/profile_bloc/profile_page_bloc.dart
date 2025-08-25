@@ -27,7 +27,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     await result.fold(
           (Failure left) { emit(const ProfilePageState(status: ApiStatus.error)); },
           (UserMeResponse right) async {
-            localSource.setVerification(value: true);
+            localSource.setVerification(value: right.firstName != null);
             emit(ProfilePageState(status: ApiStatus.success, userMeResponse: right));
       },
     );

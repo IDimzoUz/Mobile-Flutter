@@ -7,22 +7,33 @@ import 'package:imzo/core/widgets/inputs/custom_text_field.dart';
 import 'package:imzo/features/docs/model/contract_templates_response.dart';
 
 class MoneyTextFieldItemWidget extends StatefulWidget {
-  const MoneyTextFieldItemWidget({super.key, this.fields, required this.data});
+  const MoneyTextFieldItemWidget({super.key, this.fields, required this.data, this.controller,});
   final Fields? fields;
   final Function(String dataText) data;
+  final TextEditingController? controller; // ✅ Controller tashqaridan
   @override
   State<MoneyTextFieldItemWidget> createState() => MoneyTextFieldItemWidgetState();
 }
 
 class MoneyTextFieldItemWidgetState extends State<MoneyTextFieldItemWidget> {
 
-  late final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
   bool _isError = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Tashqaridan controller berilsa, uni ishlat, yo'q bo'lsa yangi yarat
+    _controller = widget.controller ?? TextEditingController();
+  }
+
+  @override
   void dispose() {
+    // Faqat o'zimiz yaratgan controller'larni dispose qilamiz
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
     super.dispose();
-    _controller.dispose(); // Muhim: Controller ni tozalash
   }
 
   void validate() {

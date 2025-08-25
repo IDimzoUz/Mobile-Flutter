@@ -12,8 +12,9 @@ import 'package:imzo/features/docs/model/contract_templates_response.dart';
 import 'package:intl/intl.dart';
 
 class IntegerTextFieldItemWidget extends StatefulWidget {
-  const IntegerTextFieldItemWidget({super.key, this.fields});
+  const IntegerTextFieldItemWidget({super.key, this.fields, required this.data});
   final Fields? fields;
+  final Function(String dataText) data;
   @override
   State<IntegerTextFieldItemWidget> createState() => IntegerTextFieldState();
 }
@@ -22,6 +23,12 @@ class IntegerTextFieldState extends State<IntegerTextFieldItemWidget> {
 
   final TextEditingController _controller = TextEditingController();
   bool _isError = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose(); // Muhim: Controller ni tozalash
+  }
 
   void validate() {
     if ((widget.fields?.required ?? false) && _controller.text.trim().isEmpty) {
@@ -37,9 +44,8 @@ class IntegerTextFieldState extends State<IntegerTextFieldItemWidget> {
         );
       });
     } else {
-      setState(() {
-        _isError = false;
-      });
+      setState(() => _isError = false);
+      widget.data(_controller.text);
     }
   }
 

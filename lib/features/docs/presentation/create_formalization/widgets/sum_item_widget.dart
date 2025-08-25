@@ -19,16 +19,26 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SumItemWidget extends StatefulWidget {
-  const SumItemWidget({super.key, this.dataSections, required this.dataReturn});
+  const SumItemWidget({super.key, this.dataSections, required this.dataReturn, this.controller});
   final Sections? dataSections;
   final Function(Map<String, String>) dataReturn;
+  final TextEditingController? controller;
   @override
   State<SumItemWidget> createState() => SumItemWidgetState();
 }
 
-class SumItemWidgetState extends State<SumItemWidget> {
+// class SumItemWidgetState extends State<SumItemWidget> {
+class SumItemWidgetState extends State<SumItemWidget> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   final Map<String, String> _fieldValues = {};
+  void onFieldDataReturn(String id, String text) {
+    if (text.isNotEmpty) {
+      _fieldValues[id] = text;
+    }
+    widget.dataReturn(_fieldValues);
+  }
   final List<GlobalKey<MoneyTextFieldItemWidgetState>> moneyKeys = [];
   final List<GlobalKey<DocumentIdTextFieldItemState>> documentKeys = [];
   final List<GlobalKey<PhoneTextFieldItemState>> phoneKeys = [];
@@ -65,12 +75,6 @@ class SumItemWidgetState extends State<SumItemWidget> {
     }
     widget.dataReturn(_fieldValues);
   }
-
-  void onFieldDataReturn(String id, String text) {
-    final value = <String, String>{id: text};
-    _fieldValues.addEntries(value.entries);
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -129,23 +133,36 @@ class SumItemWidgetState extends State<SumItemWidget> {
                   return MoneyTextFieldItemWidget(
                     fields: data?[index],
                     key: key,
+                    controller: widget.controller,
                     data: (text) => onFieldDataReturn("${data?[index].id}", text)
                   );
                 case "INTEGER":
                   // Butun son
                   final key = GlobalKey<IntegerTextFieldState>();
                   integerKeys.add(key);
-                  return IntegerTextFieldItemWidget(fields: data?[index], key: key);
+                  return IntegerTextFieldItemWidget(
+                    fields: data?[index],
+                    key: key,
+                    data: (text) => onFieldDataReturn("${data?[index].id}", text)
+                  );
                 case "DROPDOWN":
                   // Tanlov ro'yxati
                   final key = GlobalKey<DropdownItemState>();
                   dropdownKeys.add(key);
-                  return DropdownItemWidget(fields: data?[index], key: key);
+                  return DropdownItemWidget(
+                    fields: data?[index],
+                    key: key,
+                    data: (text) => onFieldDataReturn("${data?[index].id}", text)
+                  );
                 case "CHECKBOX":
                   // Ha/Yo'q
                   final key = GlobalKey<CheckboxItemState>();
                   checkboxKeys.add(key);
-                  return CheckboxItemWidget(fields: data?[index], key: key);
+                  return CheckboxItemWidget(
+                    fields: data?[index],
+                    key: key,
+                    data: (text) => onFieldDataReturn("${data?[index].id}", text)
+                  );
                 case "DATE":
                   // Sana
                   final key = GlobalKey<DateTextFieldItemState>();
@@ -168,12 +185,20 @@ class SumItemWidgetState extends State<SumItemWidget> {
                   // Katta matn
                   final key = GlobalKey<DescriptionTextFieldState>();
                   descriptionKeys.add(key);
-                  return DescriptionTextFieldItemWidget(fields: data?[index], key: key);
+                  return DescriptionTextFieldItemWidget(
+                    fields: data?[index],
+                    key: key,
+                    data: (text) => onFieldDataReturn("${data?[index].id}", text)
+                  );
                 case "PHONE":
                   // Telefon raqam
                   final key = GlobalKey<PhoneTextFieldItemState>();
                   phoneKeys.add(key);
-                  return PhoneTextFieldItemWidget(fields: data?[index], key: key);
+                  return PhoneTextFieldItemWidget(
+                    fields: data?[index],
+                    key: key,
+                    data: (text) => onFieldDataReturn("${data?[index].id}", text)
+                  );
                 case "DOCUMENT_ID":
                   // Pasport/JSHSHIR
                   final key = GlobalKey<DocumentIdTextFieldItemState>();
@@ -187,7 +212,11 @@ class SumItemWidgetState extends State<SumItemWidget> {
                   // Oddiy matn
                   final key = GlobalKey<DescriptionTextFieldState>();
                   descriptionKeys.add(key);
-                  return DescriptionTextFieldItemWidget(fields: data?[index], key: key);
+                  return DescriptionTextFieldItemWidget(
+                    fields: data?[index],
+                    key: key,
+                    data: (text) => onFieldDataReturn("${data?[index].id}", text)
+                  );
                 case "FILE":
                   // File upload
                   return const SizedBox();

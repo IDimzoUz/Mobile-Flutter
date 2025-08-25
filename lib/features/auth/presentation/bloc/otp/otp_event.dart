@@ -17,3 +17,18 @@ final class SendLoginEvent extends OtpEvent {
   @override
   List<Object?> get props => <Object?>[ phoneNumber ];
 }
+
+final class SendCreatorApprovalCodeEvent extends OtpEvent {
+  const SendCreatorApprovalCodeEvent({required this.id});
+  final int id;
+  @override
+  List<Object?> get props => <Object?>[ id ];
+}
+
+final class SendVerifyAndApproveAsCreatorEvent extends OtpEvent {
+  const SendVerifyAndApproveAsCreatorEvent({required this.id, required this.code});
+  final int id;
+  final String code;
+  @override
+  List<Object?> get props => <Object?>[ id, code ];
+}

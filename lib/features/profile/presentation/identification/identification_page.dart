@@ -5,12 +5,15 @@ import "package:go_router/go_router.dart";
 import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart";
 import "package:imzo/core/extension/custom_snackbar/top_snack_bar.dart";
+import "package:imzo/core/extension/extension.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/core/widgets/inputs/custom_text_field.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
+import "package:imzo/features/profile/model/edit_me_response.dart";
+import "package:imzo/features/profile/model/my_id_me_response.dart";
 import "package:imzo/features/profile/presentation/edit_profile/widgets/edit_profile_item_widget.dart";
 import "package:imzo/features/profile/presentation/identification/widgets/loading_dialog.dart";
 import "package:myid/enums.dart";
@@ -40,15 +43,18 @@ class _PageState extends State<IdentificationPage> {
 
       final myIdResult = await MyIdClient.start(
         config: MyIdConfig(
-            clientId: clientId,
-            clientHash: clientHash,
-            clientHashId: clientHashId,
-            environment: MyIdEnvironment.DEBUG,
-            entryType: MyIdEntryType.IDENTIFICATION,
-            locale: MyIdLocale.UZBEK,
-            imageFormat: MyIdImageFormat.JPEG
+          clientId: clientId,
+          clientHash: clientHash,
+          clientHashId: clientHashId,
+          environment: MyIdEnvironment.DEBUG,
+          entryType: MyIdEntryType.IDENTIFICATION,
+          locale: MyIdLocale.UZBEK,
+          imageFormat: MyIdImageFormat.JPEG,
+          presentationStyle: MyIdPresentationStyle.FULL,
+          cameraShape: MyIdCameraShape.ELLIPSE
         ),
         iosAppearance: const MyIdIOSAppearance(),
+
       );
       error = null;
       result = myIdResult;
@@ -58,6 +64,7 @@ class _PageState extends State<IdentificationPage> {
     } catch (e) {
       error = e.toString();
       result = null;
+      print(error);
     }
 
     if (!mounted) return;
@@ -106,12 +113,18 @@ class _PageState extends State<IdentificationPage> {
       context.read<IdentificationBloc>().add(GetMyIDMeEvent(token: state.myIDAccessToken?.accessToken ?? ""));
     }
     if (state.myIDMeResponse != null) {
+      late Profile? dataProfile = state.myIDMeResponse?.profile;
+
       context.read<IdentificationBloc>().add(
-        EditProfileEvent(
-          firstName: state.myIDMeResponse?.profile?.commonData?.firstName,
-          lastName: state.myIDMeResponse?.profile?.commonData?.lastName,
-          email: state.myIDMeResponse?.profile?.contacts?.email,
-        ),
+        EditProfileEvent(editData: EditMeResponse(
+          firstName: dataProfile?.commonData?.firstName,
+          lastName: dataProfile?.commonData?.lastName,
+          birthDate: formatSana(dataProfile?.commonData?.birthDate ?? ""),
+          gender: dataProfile?.commonData?.gender,
+          address: dataProfile?.commonData?.lastUpdateAddress,
+          pinfl: dataProfile?.commonData?.pinfl,
+          passportSerial: dataProfile?.docData?.passData,
+        )),
       );
     } else if (state.status == ApiStatus.error) {
       context.pop();

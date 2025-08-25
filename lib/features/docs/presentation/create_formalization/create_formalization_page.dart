@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:go_router/go_router.dart";
 import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/extension/build_context_extension.dart";
+import "package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart";
+import "package:imzo/core/extension/custom_snackbar/top_snack_bar.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
@@ -31,12 +34,18 @@ class _PageState extends State<CreateFormalizationPage> {
   final List<Map<String, String>> fieldValue = []; // umumiy map
   final Map<String, String> resultField = {};
   late ContractsTemplatesResponse? contractsTemplatesResponse = ContractsTemplatesResponse();
+  final Map<int, TextEditingController> _controllers = {};
 
   @override
   void initState() {
     super.initState();
-    print('AAA => ${widget.contractIDModel?.dateBirthDay} ${widget.contractIDModel?.passportID}');
     context.read<CreateFormalizationBloc>().add(GetContractsTemplatesEvent(langId: widget.contractIDModel?.languageCode ?? 0));
+  }
+
+  @override
+  void dispose() {
+    _controllers.values.forEach((controller) => controller.dispose());
+    super.dispose();
   }
 
   @override
@@ -46,7 +55,16 @@ class _PageState extends State<CreateFormalizationPage> {
         contractsTemplatesResponse = state.contractsTemplatesResponse;
       }
       if (state.createContractsResponse != null) {
-        print("SUCCESS:");
+        context.pushNamed(Routes.createFormalizationDetailPage, extra: state.createContractsResponse);
+      }
+      if (state.status == ApiStatus.error) {
+        showTopSnackBar(
+          Overlay.of(context),
+          const CustomSnackBar.error(
+            icon: Icon(Icons.close, color: AppColors.red),
+            message: "Nimadir xato ketdi.",
+          ),
+        );
       }
     },
     listenWhen: (CreateFormalizationState p, CreateFormalizationState c) => p.status != c.status || p.contractsTemplatesResponse != c.contractsTemplatesResponse || p.createContractsResponse != c.createContractsResponse,
@@ -86,13 +104,19 @@ class _PageState extends State<CreateFormalizationPage> {
                   sections?.sort((a, b) => a.orderIndex?.compareTo(b.orderIndex ?? 0) ?? 0);
                   final key = GlobalKey<SumItemWidgetState>();
                   sumItemKeys.add(key);
+                  if (!_controllers.containsKey(index)) {
+                    _controllers[index] = TextEditingController();
+                  }
                   return SumItemWidget(
                     key: key,
                     dataSections: sections?[index],
+                    controller: _controllers[index]!,
                     dataReturn: (dataReturn) {
                       fieldValue.add(dataReturn);
                       for (var item in fieldValue) {
-                        resultField.addAll(item);
+                        if (item.values.isNotEmpty) {
+                          resultField.addAll(item);
+                        }
                       }
                       print({"fieldValues": resultField});
                     },
@@ -108,20 +132,27 @@ class _PageState extends State<CreateFormalizationPage> {
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           child: CustomButton(
             width: double.infinity,
-            label: const Text('Следующий'),
+            label: state.status == ApiStatus.loading
+                ? const SizedBox(width: 25, height: 25, child: CircularProgressIndicator(backgroundColor: AppColors.opacity, color: AppColors.white))
+                : const Text('Следующий'),
             onPressed: () {
-              for (var key in sumItemKeys) {
-                key.currentState?.validateAll();
-              }
-              if (widget.contractIDModel != null) {
-                late ContractIDModel data = ContractIDModel(
-                  templateId: contractsTemplatesResponse?.id ?? 0,
-                  languageCode: widget.contractIDModel?.languageCode ?? 0,
-                  language: widget.contractIDModel?.language ?? "",
-                  dateBirthDay: widget.contractIDModel?.dateBirthDay ?? "",
-                  passportID: widget.contractIDModel?.passportID ?? ""
-                );
-                context.read<CreateFormalizationBloc>().add(CreateContractsEvent(contractIDModel: data, fieldValues: resultField));
+              if (state.status != ApiStatus.loading) {
+                for (var key in sumItemKeys) {
+                  key.currentState?.validateAll();
+                }
+                if (widget.contractIDModel != null) {
+                  late ContractIDModel data = ContractIDModel(
+                    templateId: contractsTemplatesResponse?.id ?? 0,
+                    languageCode: widget.contractIDModel?.languageCode ?? 0,
+                    language: widget.contractIDModel?.language ?? "",
+                    dateBirthDay: widget.contractIDModel?.dateBirthDay ?? "",
+                    passportID: widget.contractIDModel?.passportID ?? "",
+                    recipientPhoneNumber: widget.contractIDModel?.recipientPhoneNumber ?? "",
+                    recipientPhoneNumber2: widget.contractIDModel?.recipientPhoneNumber2 ?? "",
+                    recipientPhoneNumber3: widget.contractIDModel?.recipientPhoneNumber3 ?? "",
+                  );
+                  context.read<CreateFormalizationBloc>().add(CreateContractsEvent(contractIDModel: data, fieldValues: resultField));
+                }
               }
             },
           ),

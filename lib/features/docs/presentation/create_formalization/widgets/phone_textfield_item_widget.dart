@@ -13,8 +13,9 @@ import 'package:imzo/features/docs/model/contract_templates_response.dart';
 import 'package:intl/intl.dart';
 
 class PhoneTextFieldItemWidget extends StatefulWidget {
-  const PhoneTextFieldItemWidget({super.key, this.fields});
+  const PhoneTextFieldItemWidget({super.key, this.fields, required this.data});
   final Fields? fields;
+  final Function(String dataText) data;
   @override
   State<PhoneTextFieldItemWidget> createState() => PhoneTextFieldItemState();
 }
@@ -38,9 +39,8 @@ class PhoneTextFieldItemState extends State<PhoneTextFieldItemWidget> {
         );
       });
     } else {
-      setState(() {
-        _isError = false;
-      });
+      setState(() => _isError = false);
+      widget.data(_controller.text.isNotEmpty ? "+998${_controller.text.replaceAll(" ", "")}" : "");
     }
   }
 

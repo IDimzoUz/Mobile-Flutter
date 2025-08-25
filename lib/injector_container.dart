@@ -10,7 +10,10 @@ import "package:get_it/get_it.dart";
 import "package:go_router/go_router.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/docs/blocs/create_formalization/create_formalization_bloc.dart";
-import "package:imzo/features/docs/blocs/docs_page_bloc.dart";
+import "package:imzo/features/docs/blocs/create_formalization_detail/create_formalization_detail_bloc.dart";
+import "package:imzo/features/docs/blocs/docs/docs_page_bloc.dart";
+import "package:imzo/features/docs/blocs/formalization/formalization_bloc.dart";
+import "package:imzo/features/docs/blocs/my_paid/my_paid_bloc.dart";
 import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
 import "package:hive/hive.dart";
@@ -161,6 +164,9 @@ void _authFeature() {
     ..registerFactory(() => DocsPageBloc(repository: sl()))
     ..registerFactory(() => SelectLangDocsBloc(repository: sl()))
     ..registerFactory(() => CreateFormalizationBloc(repository: sl()))
+    ..registerFactory(() => CreateFormalizationDetailBloc(repository: sl()))
+    ..registerFactory(() => MyPaidBloc(repository: sl()))
+    ..registerFactory(() => FormalizationBloc(repository: sl()))
     ..registerFactory(() => HomePageBloc(repository: sl()));
 
 

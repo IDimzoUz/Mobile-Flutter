@@ -11,11 +11,21 @@ import "package:imzo/features/auth/presentation/otp/otp_page.dart";
 import "package:imzo/features/auth/presentation/pages/auth_page.dart";
 import "package:imzo/features/auth/presentation/public_oferta/public_offer_page.dart";
 import "package:imzo/features/docs/blocs/create_formalization/create_formalization_bloc.dart";
+import "package:imzo/features/docs/blocs/create_formalization_detail/create_formalization_detail_bloc.dart";
+import "package:imzo/features/docs/blocs/formalization/formalization_bloc.dart";
+import "package:imzo/features/docs/blocs/my_paid/my_paid_bloc.dart";
 import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
+import "package:imzo/features/docs/model/create_contracts_response.dart";
 import "package:imzo/features/docs/presentation/create_formalization/create_formalization_page.dart";
+import "package:imzo/features/docs/presentation/create_formalization_detail/create_formalization_detail_page.dart";
+import "package:imzo/features/docs/presentation/create_otp/create_otp_page.dart";
 import "package:imzo/features/docs/presentation/formalization/formalization_page.dart";
+import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
+import "package:imzo/features/docs/presentation/select_payment_verify/select_payment_verify_page.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
+import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
+import "package:imzo/features/history/presentation/pages/contract_detail/contract_detail_page.dart";
 import "package:imzo/features/history/presentation/pages/history_detail/history_detail_page.dart";
 import "package:imzo/features/history/presentation/pages/history_page.dart";
 import "package:imzo/features/home/blocs/home_page_bloc.dart";
@@ -146,7 +156,10 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
           context: context,
           state: state,
-          child: FormalizationPage(contractIDModel: state.extra! as ContractIDModel)
+          child: BlocProvider<FormalizationBloc>(
+            create: (_) => sl<FormalizationBloc>(),
+            child: FormalizationPage(contractIDModel: state.extra! as ContractIDModel)
+          )
       ),
     ),
 
@@ -164,6 +177,59 @@ final GoRouter router = GoRouter(
       ),
     ),
 
+    GoRoute(
+      path: Routes.createFormalizationDetailPage,
+      name: Routes.createFormalizationDetailPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: BlocProvider<CreateFormalizationDetailBloc>(
+              create: (_) => sl<CreateFormalizationDetailBloc>(),
+              child: CreateFormalizationDetailPage(response: state.extra! as CreateContractsResponse)
+          )
+      ),
+    ),
+
+
+    GoRoute(
+      path: Routes.myPaid,
+      name: Routes.myPaid,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: BlocProvider<MyPaidBloc>(
+              create: (_) => sl<MyPaidBloc>(),
+              child: MyPaidPage(paidModel: state.extra! as PaidModel)
+          )
+      ),
+    ),
+
+    GoRoute(
+      path: Routes.selectPaymentVerifyPage,
+      name: Routes.selectPaymentVerifyPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: SelectPaymentVerifyPage(response: state.extra! as CreateContractsResponse)
+      ),
+    ),
+
+    GoRoute(
+      path: Routes.createOtpPage,
+      name: Routes.createOtpPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: BlocProvider<OtpBloc>(
+            create: (_) => sl<OtpBloc>(),
+            child: CreateOtpPage(id: state.extra! as int)
+          )
+      ),
+    ),
 
     GoRoute(
       path: Routes.historyBalansPage,
@@ -171,7 +237,6 @@ final GoRouter router = GoRouter(
       parentNavigatorKey: rootNavigatorKey,
       builder: (_, __) => const HistoryBalansPage(),
     ),
-
 
 
     GoRoute(
@@ -216,7 +281,11 @@ final GoRouter router = GoRouter(
       path: Routes.historyDetailPage,
       name: Routes.historyDetailPage,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const HistoryDetailPage(),
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: HistoryDetailPage(dataResponse: state.extra! as ForMeHistoryResponse)
+      ),
     ),
 
     GoRoute(
@@ -229,6 +298,18 @@ final GoRouter router = GoRouter(
           child: EditProfilePage(data: state.extra! as UserMeResponse)
       ),
     ),
+
+    GoRoute(
+      path: Routes.contractDetailPage,
+      name: Routes.contractDetailPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: ContractDetailPage(content: state.extra! as ForMeHistoryResponse)
+      ),
+    ),
+
 
 
 

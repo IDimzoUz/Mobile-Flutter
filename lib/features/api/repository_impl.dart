@@ -11,8 +11,12 @@ import "package:imzo/features/auth/data/login/otp_auth_response.dart";
 import "package:imzo/features/docs/model/contract_tem_category_response.dart";
 import "package:imzo/features/docs/model/contract_templates_response.dart";
 import "package:imzo/features/docs/model/create_contracts_response.dart";
+import "package:imzo/features/docs/model/payment_response.dart";
+import "package:imzo/features/docs/model/users_search_response.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
+import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
 import "package:imzo/features/home/model/category_response.dart";
+import "package:imzo/features/profile/model/edit_me_response.dart";
 import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
 import "package:imzo/features/profile/model/user_me_response.dart";
@@ -162,9 +166,9 @@ class RepositoryImpl implements Repository {
 
 
   @override
-  Future<Either<Failure, UserMeResponse>> getUserMe({String? firstName, String? lastName, String? email, String? profilePhotoUrl}) async {
+  Future<Either<Failure, UserMeResponse>> getUserMe({EditMeResponse? edit}) async {
     try {
-      if (firstName == null || firstName.isEmpty) {
+      if (edit?.firstName == null || (edit?.firstName?.isEmpty ?? false)) {
         final Response response = await dio.get(
             Constants.baseUrl + Urls.usersMe,
             options: Options(headers: {
@@ -178,12 +182,7 @@ class RepositoryImpl implements Repository {
             options: Options(headers: {
               "Authorization": "Bearer ${localSource.accessToken}",
             }),
-            data: {
-              "firstName": firstName,
-              "lastName": lastName,
-              "email": email,
-              "profilePhotoUrl": profilePhotoUrl
-            }
+            data: edit
         );
         return Right(UserMeResponse.fromJson(response.data));
       }
@@ -225,15 +224,151 @@ class RepositoryImpl implements Repository {
       final Response response = await dio.post(
         "${Constants.baseUrl}${Urls.usersContracts}/${contractIDModel.templateId}/${contractIDModel.language}",
         options: Options(
-          headers: {
-            "Authorization": "Bearer ${localSource.accessToken}"
-          },
+          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
         ),
         data: {
           "fieldValues": fieldValues,
           "recipientDocumentId": contractIDModel.passportID,
-          "recipientBirthDate": contractIDModel.dateBirthDay
+          "recipientBirthDate": contractIDModel.dateBirthDay,
+          "recipientPhoneNumber": contractIDModel.recipientPhoneNumber,
+          "recipientPhoneNumber2": contractIDModel.recipientPhoneNumber2,
+          "recipientPhoneNumber3": contractIDModel.recipientPhoneNumber3,
         }
+      );
+      return Right(CreateContractsResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, List<ForMeHistoryResponse>>> getForMeHistory() async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.usersContractsForMe}",
+        options: Options(headers: {
+          "Authorization": "Bearer ${localSource.accessToken}",
+        }),
+      );
+      final list = <ForMeHistoryResponse>[];
+      final data = response.data as List<dynamic>;
+      for (final e in data as Iterable) {
+        list.add(ForMeHistoryResponse.fromJson(e));
+      }
+      return Right(list);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, List<ForMeHistoryResponse>>> getMyCreatedHistory() async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.usersContractsMyCreated}",
+        options: Options(headers: {
+          "Authorization": "Bearer ${localSource.accessToken}",
+        }),
+      );
+      final list = <ForMeHistoryResponse>[];
+      final data = response.data as List<dynamic>;
+      for (final e in data as Iterable) {
+        list.add(ForMeHistoryResponse.fromJson(e));
+      }
+      return Right(list);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, PaymentResponse>> getPaymentStatus({required int id}) async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.usersContractsPaymentStatus}/$id/payment-status",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer ${localSource.accessToken}"
+          },
+        ),
+      );
+      return Right(PaymentResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, UsersSearchResponse>> getUsersSearch({required String search}) async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.usersSearch}",
+        options: Options(
+          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
+        ),
+        queryParameters: { "query": search }
+      );
+      return Right(UsersSearchResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+
+
+  @override
+  Future<Either<Failure, String>> sendCreatorApprovalCode({required int id}) async {
+    try {
+      final Response response = await dio.post(
+        "${Constants.baseUrl}${Urls.usersContracts}/$id/send-creator-approval-code",
+        options: Options(
+          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
+        ),
+      );
+      return const Right("Tasdiqlash kodi yuborildi");
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, CreateContractsResponse>> sendVerifyAndApproveAsCreator({required int id, required String code}) async {
+    try {
+      final Response response = await dio.post(
+        "${Constants.baseUrl}${Urls.usersContracts}/$id/verify-and-approve-as-creator",
+        options: Options(
+          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
+        ),
+        queryParameters: { "code": code }
       );
       return Right(CreateContractsResponse.fromJson(response.data));
     } on DioException catch (error, stacktrace) {

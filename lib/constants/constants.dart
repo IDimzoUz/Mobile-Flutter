@@ -65,6 +65,13 @@ sealed class Urls {
   static const String editPhone = "/api/users/phone";
   static const String usersMe = "/api/users/me";
   static const String usersContracts = "/api/user/contracts";
+  static const String usersContractsMyCreated = "/api/user/contracts/my-created";
+  static const String usersContractsForMe = "/api/user/contracts/for-me";
+  static const String usersContractsPaymentStatus = "/api/user/contracts";
+  static const String usersSearch = "/api/users/search";
+
+
+
 
   // MARK: MyID EndPoints
   static const String myIDAccessToken = "/api/v1/oauth2/access-token";

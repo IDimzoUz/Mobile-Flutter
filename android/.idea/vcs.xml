@@ -2,5 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../../../DeskTop/FlutterSDK/flutter_macos_arm64_3.29.2-stable" vcs="Git" />
   </component>
 </project>

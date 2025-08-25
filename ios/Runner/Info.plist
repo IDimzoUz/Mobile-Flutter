@@ -45,6 +45,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+    <array>
+   		<string>fetch</string>
+   		<string>remote-notification</string>
+   	</array>
+   	<key>FirebaseAppDelegateProxyEnabled</key>
+   	<false/>
+    <key>FirebaseAutomaticScreenReportingEnabled</key>
+   	<false/>
+   	<key>ITSAppUsesNonExemptEncryption</key>
+   	<false/>
 	<key>io.flutter.embedded_views_preview</key>
     <string>YES</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>

@@ -3,7 +3,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:imzo/core/extension/build_context_extension.dart";
 import "package:imzo/core/l10n/app_localizations_setup.dart";
 import "package:imzo/core/theme/themes.dart";
-import "package:imzo/features/docs/blocs/docs_page_bloc.dart";
+import "package:imzo/features/docs/blocs/docs/docs_page_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
 import "package:imzo/features/profile/blocs/profile_bloc/profile_page_bloc.dart";

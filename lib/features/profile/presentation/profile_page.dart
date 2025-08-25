@@ -85,7 +85,7 @@ class _PageState extends State<ProfilePage> with ProfileMixin {
               backgroundColor: AppColors.baseColor.withOpacity(0.08),
               onPressed: () {
                 localSource.box.clear();
-                context.goNamed(Routes.languagePage);
+                localSource.setVerification(value: false);
               },
               label: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

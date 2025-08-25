@@ -73,15 +73,14 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) => PopScope(
     canPop: navigationShell.currentIndex != 0,
     onPopInvoked: (bool v) => navigationShell.goBranch(0),
-
     child: PersistentTabView(
       tabs: _tabs(context),
       navBarBuilder: (navBarConfig) => Style1BottomNavBar(
         navBarConfig: navBarConfig,
         navBarDecoration: NavBarDecoration(
-              borderRadius: AppUtils.kBorderRadius16,
-              boxShadow: [
-                BoxShadow(
+            borderRadius: AppUtils.kBorderRadius16,
+            boxShadow: [
+              BoxShadow(
                   color: AppColors.grey.withOpacity(0.3),
                   offset: const Offset(0, 0),
                   blurRadius: 10

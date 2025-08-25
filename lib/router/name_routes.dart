@@ -23,6 +23,13 @@ sealed class Routes { Routes._();
   static const String historyDetailPage = "/historyDetailPage";
   static const String docsPage = "/docsPage";
   static const String createFormalizationPage = "/createFormalizationPage";
+  static const String createFormalizationDetailPage = "/createFormalizationDetailPage";
+  static const String myPaid = "/myPaid";
+  static const String selectPaymentVerifyPage = "/selectPaymentVerifyPage";
+  static const String contractDetailPage = "/contractDetailPage";
+  static const String createOtpPage = "/createOtpPage";
+
+
 
 
   /// internet connection

@@ -7,24 +7,24 @@ mixin SplashMixin on State<SplashPage> {
     if (!mounted) {
       return;
     }
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () async {
       // ignore: discarded_futures
-      RemoteConfigService.isCallCheckAppVersion(context).then(
-            ((AppUpdate, String, String) value) async {
-          if (value.$1 != AppUpdate.none) {
-            await appUpdateBottomSheet(
-              isForceUpdate: value.$1 == AppUpdate.forceUpdate,
-            ).then((_) => nextToNavigation());
-          } else {
-            await nextToNavigation();
-          }
-        },
-      );
+      await nextToNavigation();
+      // RemoteConfigService.isCallCheckAppVersion(context).then(((AppUpdate, String, String) value) async {
+      //     if (value.$1 != AppUpdate.none) {
+      //       await appUpdateBottomSheet(
+      //         isForceUpdate: value.$1 == AppUpdate.forceUpdate,
+      //       ).then((_) => nextToNavigation());
+      //     } else {
+      //       await nextToNavigation();
+      //     }
+      //   },
+      // );
     });
   }
 
   Future<void> nextToNavigation() async {
-    print("TOKEN: ${localSource.accessToken}");
+    print("Access TOKEN: ${localSource.accessToken}");
     if (localSource.accessToken.isEmpty)  {
       context.goNamed(Routes.languagePage);
     } else {

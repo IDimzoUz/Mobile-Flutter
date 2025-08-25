@@ -38,7 +38,6 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     await result.fold(
           (Failure left) { emit(const HomePageState(status: ApiStatus.error)); },
           (UserMeResponse right) async {
-        localSource.setVerification(value: true);
         emit(HomePageState(status: ApiStatus.success, userMeResponse: right));
       },
     );

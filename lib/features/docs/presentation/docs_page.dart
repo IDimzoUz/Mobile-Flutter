@@ -8,7 +8,7 @@ import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/core/widgets/inputs/custom_text_field.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
-import "package:imzo/features/docs/blocs/docs_page_bloc.dart";
+import "package:imzo/features/docs/blocs/docs/docs_page_bloc.dart";
 import "package:imzo/features/docs/presentation/mixin/docs_mixin.dart";
 import "package:imzo/features/docs/presentation/widgets/docs_item_widget.dart";
 import 'package:imzo/features/home/blocs/home_page_bloc.dart';

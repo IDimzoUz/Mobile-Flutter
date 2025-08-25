@@ -19,17 +19,9 @@ final class GetMyIDMeEvent extends IdentificationEvent {
 }
 
 final class EditProfileEvent extends IdentificationEvent {
-  const EditProfileEvent({
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.profilePhotoUrl,
-  });
-  final String? firstName;
-  final String? lastName;
-  final String? email;
-  final String? profilePhotoUrl;
+  const EditProfileEvent({this.editData});
+  final EditMeResponse? editData;
 
   @override
-  List<Object?> get props => [ firstName, lastName, email, profilePhotoUrl ];
+  List<Object?> get props => [ editData ];
 }

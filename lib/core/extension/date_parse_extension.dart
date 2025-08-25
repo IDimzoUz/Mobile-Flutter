@@ -1,10 +1,35 @@
 part of "extension.dart";
 
+String formatSana(String sana) {
+  try {
+    List<String> items = sana.split('.');
+    if (items.length == 3) {
+      return "${items[2]}-${items[1]}-${items[0]}";
+    }
+    return sana; // Agar format noto'g'ri bo'lsa, original qaytarish
+  } catch (e) {
+    return sana;
+  }
+}
+
+String capitalizeFirstLetter(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1).toLowerCase();
+}
+
+String formatDateFormat(String inputString) {
+  // Stringni DateTime obyektiga aylantiramiz
+  DateTime dateTime = DateTime.parse(inputString);
+  // Formatni sozlash (5 Фев 17:37)
+  final DateFormat formatter = DateFormat('d MMM HH:mm', 'ru_RU');
+  return formatter.format(dateTime);
+}
+
 extension ParseString on DateTime {
   String get formatDate => DateFormat("dd.MM.yyyy").format(this);
 
-  String get formatDateTime =>
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(this);
+  String get formatDateTime => DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(this);
+
 
   String timeZone() {
     String date = toIso8601String().split(".")[0];

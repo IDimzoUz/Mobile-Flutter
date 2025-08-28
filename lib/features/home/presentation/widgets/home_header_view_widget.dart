@@ -10,8 +10,9 @@ import "package:imzo/features/profile/presentation/widgets/me_profile_widget.dar
 import "package:imzo/router/app_routes.dart";
 
 class HomeHeaderViewWidget extends StatelessWidget {
-  const HomeHeaderViewWidget({super.key, this.data});
+  const HomeHeaderViewWidget({super.key, this.data, this.unreadCount = 0});
   final UserMeResponse? data;
+  final int unreadCount;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -19,14 +20,24 @@ class HomeHeaderViewWidget extends StatelessWidget {
     child: Row(
       children: [
         AppUtils.kGap8,
-        Flexible(
-          child: MeProfileWidget(data: data),
-        ),
+        Flexible(child: MeProfileWidget(data: data)),
         CustomButton(
           backgroundColor: AppColors.opacity,
           width: 50,
           onPressed: () => context.pushNamed(Routes.notificationPage),
-          label: SvgPicture.asset(SvgIcons.icNotification),
+          label: Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              SvgPicture.asset(SvgIcons.icNotification),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: CircleAvatar(
+                  radius: 5, // radius = diameter / 5
+                  backgroundColor: unreadCount != 0 ? AppColors.red : AppColors.opacity
+                ),
+              )
+            ],
+          ),
         )
       ],
     ),

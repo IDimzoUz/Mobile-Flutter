@@ -19,33 +19,29 @@ import "package:imzo/services/notification_service.dart";
 void main() async {
   /// flutter_native_splash
   final WidgetsBinding binding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // await Firebase.initializeApp();
-
+  // 2. Splash screen ni saqlab qolish
   FlutterNativeSplash.preserve(widgetsBinding: binding);
 
-  // FCM Token olish
+  // 3. Firebase ni ishga tushirish (NotificationService dan OLDIN)
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // 4. Notification service ni ishga tushirish
+  await NotificationService.initialize();
+  // Background message handler
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //
+  // FlutterNativeSplash.preserve(widgetsBinding: binding);
+  //
+  // // FCM Token olish
   // String? token = await FirebaseMessaging.instance.getToken();
   // log("FCM TOKEN: $token");
-
-
-  // if (Platform.isIOS || Platform.isMacOS) {
-  //   print("IOS");
-  //   final String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-  //   if (apnsToken != null) {
-  //     // ignore: unawaited_futures
-  //     FirebaseMessaging.instance.getAPNSToken().then((String? token) => log('FCM TOKEN: $token'),
-  //     );
-  //   } else {
-  //     print("IOS ${apnsToken}");
-  //   }
-  // } else {
-  //   print("Android device detected");
-  //   // ignore: unawaited_futures
-  //   FirebaseMessaging.instance.getToken().then((String? token) {
-  //     log('FCM TOKEN: $token');
-  //   });
-  // }
+  //
+  //
   // await NotificationService.initialize();
 
   // await Future.wait(
@@ -94,6 +90,12 @@ class _HttpOverrides extends HttpOverrides {
         ..badCertificateCallback = (_, __, ___) => true;
 }
 
+// Background message handler function
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Background message: ${message.messageId}");
+  // Backgroundda notification ko'rsatish
+}
 /// flutter pub run flutter_launcher_icons:main
 /// flutter run -d windows
 /// flutter build apk --release

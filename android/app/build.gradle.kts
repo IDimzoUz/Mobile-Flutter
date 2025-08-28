@@ -1,6 +1,6 @@
 plugins {
     id("com.android.application")
-//    id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
@@ -12,6 +12,7 @@ android {
     ndkVersion = "27.0.12077973"
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -39,16 +40,45 @@ android {
         }
     }
 
-//    dependencies {
+    dependencies {
 //        implementation 'com.android.support:appcompat-v7:33.0.0'
 //        implementation platform('com.google.firebase:firebase-bom:33.13.0')
 //        implementation 'com.google.firebase:firebase-analytics'
 //        implementation 'com.google.firebase:firebase-messaging'
 //        implementation "com.google.code.gson:gson:2.11.0"
 //        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
-//    }
+        implementation("androidx.window:window:1.0.0")
+        implementation("androidx.window:window-java:1.0.0")
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+        testImplementation("junit:junit:4.12")
+        androidTestImplementation("androidx.test:runner:1.2.0")
+        androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+//        implementation("com.google.firebase:firebase-messaging")
+//        implementation platform("com.google.firebase:firebase-bom:33.13.0")
+        implementation("com.android.support:appcompat-v7:33.0.0")
+        implementation("com.google.code.gson:gson:2.11.0")
+    }
 }
 
 flutter {
     source = "../.."
 }
+
+dependencies {
+    implementation("com.google.firebase:firebase-messaging:23.4.0")
+}
+
+apply(plugin = "com.google.gms.google-services")
+
+//dependencies {
+//    implementation("androidx.window:window:1.0.0")
+//    implementation("androidx.window:window-java:1.0.0")
+//    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+//    testImplementation("junit:junit:4.12")
+//    androidTestImplementation("androidx.test:runner:1.2.0")
+//    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+//    implementation("com.google.firebase:firebase-messaging")
+//    implementation platform("com.google.firebase:firebase-bom:33.13.0")
+//    implementation("com.android.support:appcompat-v7:33.0.0")
+//    implementation("com.google.code.gson:gson:2.11.0")
+//}

@@ -66,7 +66,7 @@ final ThemeData lightTheme = ThemeData(
     thickness: const WidgetStatePropertyAll<double>(5),
     minThumbLength: 100,
   ),
-  bottomAppBarTheme: const BottomAppBarTheme(
+  bottomAppBarTheme: const BottomAppBarThemeData(
     elevation: 1,
     color: Colors.white,
     surfaceTintColor: Colors.white,
@@ -351,7 +351,7 @@ final ThemeData darkTheme = ThemeData(
     thickness: const WidgetStatePropertyAll<double>(5),
     minThumbLength: 100,
   ),
-  bottomAppBarTheme: const BottomAppBarTheme(
+  bottomAppBarTheme: const BottomAppBarThemeData(
     elevation: 1,
     color: Colors.white,
     surfaceTintColor: Colors.white,

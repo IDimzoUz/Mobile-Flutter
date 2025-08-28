@@ -9,6 +9,8 @@ import 'package:imzo/features/docs/model/users_search_response.dart';
 import 'package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart';
 import 'package:imzo/features/history/presentation/model/for_me_history_response.dart';
 import 'package:imzo/features/home/model/category_response.dart';
+import 'package:imzo/features/home/model/news_response.dart';
+import 'package:imzo/features/home/model/notifications_response.dart';
 import 'package:imzo/features/profile/model/edit_me_response.dart';
 import 'package:imzo/features/profile/model/my_id_access_token_response.dart';
 import 'package:imzo/features/profile/model/my_id_me_response.dart';
@@ -31,6 +33,11 @@ const Repository();
   Future<Either<Failure, String>> sendCreatorApprovalCode({required int id});
   Future<Either<Failure, CreateContractsResponse>> sendVerifyAndApproveAsCreator({required int id, required String code});
   Future<Either<Failure, UsersSearchResponse>> getUsersSearch({required String search});
+  Future<Either<Failure, int>> getUnreadCount();
+  Future<Either<Failure, AllNotificationsResponse>> getNotifications();
+  Future<Either<Failure, List<NewsResponse>>> getNews();
+  Future<Either<Failure, bool>> sendNewsView({required int id});
+
 
 
   // Mark: MyID Apis

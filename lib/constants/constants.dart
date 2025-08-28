@@ -69,6 +69,12 @@ sealed class Urls {
   static const String usersContractsForMe = "/api/user/contracts/for-me";
   static const String usersContractsPaymentStatus = "/api/user/contracts";
   static const String usersSearch = "/api/users/search";
+  static const String notificationsUnreadCount = "/api/notifications/unread-count";
+  static const String notificationsUnread = "/api/notifications/unread";
+  static const String notifications = "/api/notifications";
+  static const String news = "/api/news";
+
+
 
 
 

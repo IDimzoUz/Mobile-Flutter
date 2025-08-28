@@ -28,8 +28,11 @@ import "package:imzo/features/history/presentation/model/for_me_history_response
 import "package:imzo/features/history/presentation/pages/contract_detail/contract_detail_page.dart";
 import "package:imzo/features/history/presentation/pages/history_detail/history_detail_page.dart";
 import "package:imzo/features/history/presentation/pages/history_page.dart";
-import "package:imzo/features/home/blocs/home_page_bloc.dart";
+import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
+import "package:imzo/features/home/blocs/notification_bloc/notification_bloc.dart";
+import "package:imzo/features/home/model/news_response.dart";
 import "package:imzo/features/home/presentation/home_page.dart";
+import "package:imzo/features/home/presentation/news_detail/news_detail_page.dart";
 import "package:imzo/features/home/presentation/notification/notification_page.dart";
 import "package:imzo/features/main/presentation/bloc/main_bloc.dart";
 import "package:imzo/features/main/presentation/pages/main_page.dart";
@@ -193,6 +196,18 @@ final GoRouter router = GoRouter(
 
 
     GoRoute(
+      path: Routes.newsDetailPage,
+      name: Routes.newsDetailPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: NewsDetailPage(newsDetail: state.extra! as NewsResponse)
+      ),
+    ),
+
+
+    GoRoute(
       path: Routes.myPaid,
       name: Routes.myPaid,
       parentNavigatorKey: rootNavigatorKey,
@@ -265,7 +280,7 @@ final GoRouter router = GoRouter(
       name: Routes.identificationPage,
       parentNavigatorKey: rootNavigatorKey,
       builder: (_, __) => BlocProvider<IdentificationBloc>(
-        create: (_)=>sl<IdentificationBloc>(),
+        create: (_) => sl<IdentificationBloc>(),
         child: const IdentificationPage()
       )
     ),
@@ -274,7 +289,10 @@ final GoRouter router = GoRouter(
       path: Routes.notificationPage,
       name: Routes.notificationPage,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const NotificationPage(),
+      builder: (_, __) => BlocProvider<NotificationBloc>(
+        create: (_) => sl<NotificationBloc>(),
+        child: const NotificationPage()
+      )
     ),
 
     GoRoute(

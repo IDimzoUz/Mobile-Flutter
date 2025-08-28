@@ -5,7 +5,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
-import 'package:imzo/features/home/blocs/home_page_bloc.dart';
+import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
 import "package:imzo/features/home/presentation/mixin/home_mixin.dart";
 import "package:imzo/features/home/presentation/widgets/category_item_widget.dart";
 import "package:imzo/features/home/presentation/widgets/home_header_view_widget.dart";
@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     super.initState();
     context.read<HomePageBloc>().add(const GetCategoryEvent());
     context.read<HomePageBloc>().add(const GetHomeMeEvent());
+    context.read<HomePageBloc>().add(const GetNewsEvent());
   }
 
   @override
@@ -42,16 +43,21 @@ class _HomePageState extends State<HomePage> with HomeMixin {
           localSource.setVerification(value: state.userMeResponse?.firstName != null);
           userMeResponse = state.userMeResponse!;
         }
+        if (state.newsResponse != null) {
+          newsResponse = state.newsResponse!;
+        }
         setState(() {});
       }
     },
-    listenWhen: (HomePageState p, HomePageState c) => p.categoryResponse != c.categoryResponse || p.userMeResponse != c.userMeResponse,
+    listenWhen: (HomePageState p, HomePageState c) => p.categoryResponse != c.categoryResponse || p.userMeResponse != c.userMeResponse || p.newsResponse != c.newsResponse,
     child: LifecycleAware(
       observer: LifecycleObserver(
-        onVisible: (Lifecycle l) { }
+        onVisible: (Lifecycle l) {
+          context.read<HomePageBloc>().add(const GetNotificationUnreadCountEvent());
+        }
       ),
       builder: (BuildContext context, Lifecycle lifecycle) => BlocBuilder<HomePageBloc, HomePageState>(
-        buildWhen: (p, n) => p.categoryResponse != n.categoryResponse || p.userMeResponse != n.userMeResponse,
+        buildWhen: (p, n) => p.categoryResponse != n.categoryResponse || p.userMeResponse != n.userMeResponse || p.unreadCount != n.unreadCount,
         builder: (context, state) => Scaffold(
           body: Column(
             children: [
@@ -63,10 +69,11 @@ class _HomePageState extends State<HomePage> with HomeMixin {
                   borderRadius: const BorderRadius.horizontal(left: Radius.circular(20), right: Radius.circular(20))
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HomeHeaderViewWidget(data: userMeResponse),
+                    HomeHeaderViewWidget(data: userMeResponse, unreadCount: state.unreadCount ?? 0),
                     AppUtils.kGap24,
-                    const HomeStoriesWidget()
+                    HomeStoriesWidget(newsData: newsResponse)
                   ],
                 ),
               ),

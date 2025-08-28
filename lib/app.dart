@@ -8,7 +8,7 @@ import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
 import "package:imzo/features/profile/blocs/profile_bloc/profile_page_bloc.dart";
 import "package:imzo/router/app_routes.dart";
-import "package:imzo/features/home/blocs/home_page_bloc.dart";
+import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
 import "package:imzo/injector_container.dart";
 
 class App extends StatelessWidget {

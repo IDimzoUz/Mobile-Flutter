@@ -11,7 +11,7 @@ import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/docs/blocs/docs/docs_page_bloc.dart";
 import "package:imzo/features/docs/presentation/mixin/docs_mixin.dart";
 import "package:imzo/features/docs/presentation/widgets/docs_item_widget.dart";
-import 'package:imzo/features/home/blocs/home_page_bloc.dart';
+import 'package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart';
 import "package:imzo/features/home/presentation/mixin/home_mixin.dart";
 import "package:imzo/features/main/presentation/pages/widgets/navigation_service.dart";
 import "package:imzo/router/app_routes.dart";

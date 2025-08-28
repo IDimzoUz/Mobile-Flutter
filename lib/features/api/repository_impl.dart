@@ -16,6 +16,8 @@ import "package:imzo/features/docs/model/users_search_response.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
 import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
 import "package:imzo/features/home/model/category_response.dart";
+import "package:imzo/features/home/model/news_response.dart";
+import "package:imzo/features/home/model/notifications_response.dart";
 import "package:imzo/features/profile/model/edit_me_response.dart";
 import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
@@ -371,6 +373,92 @@ class RepositoryImpl implements Repository {
         queryParameters: { "code": code }
       );
       return Right(CreateContractsResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> getUnreadCount() async {
+    try {
+      final Response response = await dio.get(
+          "${Constants.baseUrl}${Urls.notificationsUnreadCount}",
+          options: Options(
+            headers: { "Authorization": "Bearer ${localSource.accessToken}" },
+          ),
+      );
+      return Right(response.data["unreadCount"]);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, List<NewsResponse>>> getNews() async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.news}",
+        options: Options(headers: {
+          "Authorization": "Bearer ${localSource.accessToken}",
+        }),
+      );
+      final list = <NewsResponse>[];
+      final data = response.data as List<dynamic>;
+      for (final e in data as Iterable) {
+        list.add(NewsResponse.fromJson(e));
+      }
+      return Right(list);
+
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+
+  @override
+  Future<Either<Failure, bool>> sendNewsView({required int id}) async {
+    try {
+      await dio.post(
+        "${Constants.baseUrl}${Urls.news}/$id/view",
+        options: Options(
+          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
+        ),
+      );
+      return const Right(true);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, AllNotificationsResponse>> getNotifications() async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.notifications}",
+        options: Options(
+          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
+        ),
+      );
+      return Right(AllNotificationsResponse.fromJson(response.data));
     } on DioException catch (error, stacktrace) {
       log("Exception occurred -: $error stacktrace: $stacktrace");
       return Left(ServerError.withDioError(error: error).failure);

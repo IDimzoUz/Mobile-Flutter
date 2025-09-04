@@ -1,12 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter_svg/flutter_svg.dart";
 import "package:imzo/core/extension/extension.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
-import "package:imzo/core/widgets/bottom_sheet/custom_bottom_sheet.dart";
-import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/features/home/model/notifications_response.dart";
-import "package:imzo/features/home/presentation/notification/widgets/notification_note_bottom_sheet.dart";
 
 class NotificationItemWidget extends StatelessWidget {
   const NotificationItemWidget({super.key, this.data});

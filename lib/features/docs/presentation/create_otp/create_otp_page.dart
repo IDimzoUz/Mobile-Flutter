@@ -9,12 +9,10 @@ import "package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart";
 import "package:imzo/core/extension/custom_snackbar/top_snack_bar.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
-import "package:imzo/features/auth/data/login/login_user_response.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/auth/presentation/widgets/progress_indicator.dart";
 import "package:imzo/features/docs/model/create_contracts_response.dart";
-import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/router/app_routes.dart";
 import "package:pin_input_text_field/pin_input_text_field.dart";
 

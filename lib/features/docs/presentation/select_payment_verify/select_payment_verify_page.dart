@@ -1,14 +1,11 @@
 import "package:flutter/material.dart";
-import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
 import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
-import "package:imzo/features/docs/blocs/create_formalization_detail/create_formalization_detail_bloc.dart";
 import "package:imzo/features/docs/model/create_contracts_response.dart";
-import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/router/app_routes.dart";
 
 

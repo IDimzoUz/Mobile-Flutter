@@ -1,24 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
-import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
-import "package:imzo/constants/image_constants.dart";
-import "package:imzo/core/extension/build_context_extension.dart";
 import "package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart";
 import "package:imzo/core/extension/custom_snackbar/top_snack_bar.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
-import "package:imzo/core/widgets/inputs/custom_phone_text_field.dart";
-import "package:imzo/core/widgets/inputs/custom_text_field.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/docs/blocs/create_formalization/create_formalization_bloc.dart";
 import "package:imzo/features/docs/model/contract_templates_response.dart";
 import "package:imzo/features/docs/presentation/create_formalization/widgets/sum_item_widget.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
-import "package:imzo/features/docs/presentation/widgets/docs_item_widget.dart";
-import "package:imzo/features/others/presentation/pages/language/language_page.dart";
-import "package:imzo/features/others/presentation/pages/language/widgets/lan_checkbox_widget.dart";
 import "package:imzo/router/app_routes.dart";
 
 class CreateFormalizationPage extends StatefulWidget {

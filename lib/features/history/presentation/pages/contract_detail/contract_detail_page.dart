@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:go_router/go_router.dart";
-import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
@@ -10,10 +9,8 @@ import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_event.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_state.dart";
-import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
 import "package:imzo/features/history/presentation/pages/widgets/approved_dialog.dart";
 import "package:imzo/features/history/presentation/pages/widgets/pending_dialog.dart";
-import "package:imzo/features/profile/presentation/identification/widgets/loading_dialog.dart";
 import "package:imzo/router/app_routes.dart";
 
 

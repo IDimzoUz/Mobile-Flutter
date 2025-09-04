@@ -3,14 +3,11 @@ import "dart:io";
 
 import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
-import "package:flutter_svg/svg.dart";
 import "package:go_router/go_router.dart";
-import "package:imzo/constants/image_constants.dart";
 import "package:imzo/core/extension/custom_snackbar/custom_snack_bar.dart";
 import "package:imzo/core/extension/custom_snackbar/top_snack_bar.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
-import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/auth/presentation/pages/auth_page.dart";
 import "package:imzo/router/app_routes.dart";
 

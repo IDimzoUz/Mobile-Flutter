@@ -1,13 +1,9 @@
 import "package:equatable/equatable.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
-import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:imzo/core/error/failure.dart";
 import "package:imzo/features/api/repository.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
-import "package:imzo/features/home/model/category_response.dart";
-import "package:imzo/features/home/model/news_response.dart";
 import "package:imzo/features/home/model/notifications_response.dart";
-import "package:imzo/features/profile/model/user_me_response.dart";
 
 part "notification_event.dart";
 part "notification_state.dart";

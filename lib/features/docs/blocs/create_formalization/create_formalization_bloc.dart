@@ -21,12 +21,11 @@ class CreateFormalizationBloc extends Bloc<CreateFormalizationEvent, CreateForma
   final Repository repository;
 
   Future<void> _getContractsTemplates(GetContractsTemplatesEvent event, Emitter<CreateFormalizationState> emit) async {
-    emit(const CreateFormalizationState(status: ApiStatus.loading));
     final result = await repository.getContractsTemplates(langId: event.langId);
     await result.fold(
-          (Failure left) { emit(const CreateFormalizationState(status: ApiStatus.error)); },
+          (Failure left) { },
           (ContractsTemplatesResponse right) async {
-        emit(CreateFormalizationState(status: ApiStatus.success, contractsTemplatesResponse: right));
+        emit(CreateFormalizationState(contractsTemplatesResponse: right));
       },
     );
   }

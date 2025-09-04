@@ -1,3 +1,7 @@
+import "dart:developer";
+import "dart:io";
+
+import "package:firebase_messaging/firebase_messaging.dart";
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:go_router/go_router.dart";
@@ -18,6 +22,26 @@ mixin AuthMixin on State<AuthPage> {
   void initState() {
     super.initState();
     initControllers();
+    setFCMToken();
+  }
+
+  Future<void> setFCMToken() async {
+    if (Platform.isIOS || Platform.isMacOS) {
+      final String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (apnsToken != null) {
+        // ignore: unawaited_futures
+        FirebaseMessaging.instance.getAPNSToken().then((String? token) async {
+          log('FCM TOKEN: $token');
+          await localSource.setFcmToken(token ?? "");
+        });
+      }
+    } else {
+      // ignore: unawaited_futures
+      FirebaseMessaging.instance.getToken().then((String? token) async {
+        log('FCM TOKEN: $token');
+        await localSource.setFcmToken(token ?? "");
+      });
+    }
   }
 
   void initControllers() {

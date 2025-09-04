@@ -54,10 +54,9 @@ class _PageState extends State<CreateFormalizationPage> {
       if (state.contractsTemplatesResponse != null) {
         contractsTemplatesResponse = state.contractsTemplatesResponse;
       }
-      if (state.createContractsResponse != null) {
+      if (state.createContractsResponse != null && state.status == ApiStatus.success) {
         context.pushNamed(Routes.createFormalizationDetailPage, extra: state.createContractsResponse);
-      }
-      if (state.status == ApiStatus.error) {
+      } else if (state.status == ApiStatus.error) {
         showTopSnackBar(
           Overlay.of(context),
           const CustomSnackBar.error(
@@ -69,7 +68,7 @@ class _PageState extends State<CreateFormalizationPage> {
     },
     listenWhen: (CreateFormalizationState p, CreateFormalizationState c) => p.status != c.status || p.contractsTemplatesResponse != c.contractsTemplatesResponse || p.createContractsResponse != c.createContractsResponse,
     child: BlocBuilder<CreateFormalizationBloc, CreateFormalizationState>(
-    buildWhen: (p, n) => p.contractsTemplatesResponse != n.contractsTemplatesResponse || p.createContractsResponse != n.createContractsResponse,
+    buildWhen: (p, n) => p.contractsTemplatesResponse != n.contractsTemplatesResponse || p.createContractsResponse != n.createContractsResponse || p.status != n.status ,
       builder: (context, state) => Scaffold(
         appBar: AppBar(
           title: Text(
@@ -125,7 +124,7 @@ class _PageState extends State<CreateFormalizationPage> {
                 separatorBuilder: (_, __) => AppUtils.kGap,
                 itemCount: contractsTemplatesResponse?.translations?[0].sections?.length ?? 0,
               ),
-            )
+            ),
           ],
         ),
         bottomNavigationBar: Padding(
@@ -140,6 +139,7 @@ class _PageState extends State<CreateFormalizationPage> {
                 for (var key in sumItemKeys) {
                   key.currentState?.validateAll();
                 }
+                print("SUMKEY-${sumItemKeys}");
                 if (widget.contractIDModel != null) {
                   late ContractIDModel data = ContractIDModel(
                     templateId: contractsTemplatesResponse?.id ?? 0,

@@ -15,6 +15,7 @@ part "notification_state.dart";
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc({required this.repository}) : super(const NotificationState(status: ApiStatus.initial)) {
     on<GetNotificationEvent>(_getAllNotifications);
+    on<PutNotificationIsReadEvent>(_putNotificationIsRead);
   }
 
   final Repository repository;
@@ -26,6 +27,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
        (AllNotificationsResponse right) async {
         emit(NotificationState(status: ApiStatus.success, notificationResponse: right));
       },
+    );
+  }
+
+  Future<void> _putNotificationIsRead(PutNotificationIsReadEvent event, Emitter<NotificationState> emit) async {
+      final result = await repository.editNotificationIsRead(id: event.id, allRead: event.allRead);
+      await result.fold( (Failure left) { }, (bool right) async { },
     );
   }
 

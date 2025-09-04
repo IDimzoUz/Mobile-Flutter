@@ -1,5 +1,4 @@
 import "dart:developer";
-import "dart:io";
 import "package:dio/dio.dart";
 import "package:imzo/constants/constants.dart";
 import "package:imzo/core/either/either.dart";
@@ -73,9 +72,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         Constants.baseUrl + Urls.categories,
-        options: Options(headers: {
-          "Authorization": "Bearer ${localSource.accessToken}",
-        }),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       final list = <CategoryResponse>[];
       final data = response.data as List<dynamic>;
@@ -97,9 +94,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.contractTemplatesCategory}/$id",
-        options: Options(headers: {
-          "Authorization": "Bearer ${localSource.accessToken}",
-        }),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       final list = <ContractTemplatesCategoryResponse>[];
       final data = response.data as List<dynamic>;
@@ -150,9 +145,7 @@ class RepositoryImpl implements Repository {
       final Response response = await dio.get(
         'https://devmyid.uz${Urls.myIDUsersMe}',
         options: Options(
-          headers: {
-            "Authorization": "Bearer $token"
-          },
+          headers: { "Authorization": "Bearer $token" },
           contentType: "application/x-www-form-urlencoded",
         ),
       );
@@ -172,19 +165,15 @@ class RepositoryImpl implements Repository {
     try {
       if (edit?.firstName == null || (edit?.firstName?.isEmpty ?? false)) {
         final Response response = await dio.get(
-            Constants.baseUrl + Urls.usersMe,
-            options: Options(headers: {
-              "Authorization": "Bearer ${localSource.accessToken}",
-            }),
+          Constants.baseUrl + Urls.usersMe,
+          options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
         );
         return Right(UserMeResponse.fromJson(response.data));
       } else {
         final Response response = await dio.put(
-            Constants.baseUrl + Urls.profile,
-            options: Options(headers: {
-              "Authorization": "Bearer ${localSource.accessToken}",
-            }),
-            data: edit
+          Constants.baseUrl + Urls.profile,
+          options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+          data: edit
         );
         return Right(UserMeResponse.fromJson(response.data));
       }
@@ -202,11 +191,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.contractTemplates}/$langId",
-        options: Options(
-          headers: {
-            "Authorization": "Bearer ${localSource.accessToken}"
-          },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return Right(ContractsTemplatesResponse.fromJson(response.data));
     } on DioException catch (error, stacktrace) {
@@ -225,9 +210,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.post(
         "${Constants.baseUrl}${Urls.usersContracts}/${contractIDModel.templateId}/${contractIDModel.language}",
-        options: Options(
-          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
         data: {
           "fieldValues": fieldValues,
           "recipientDocumentId": contractIDModel.passportID,
@@ -253,15 +236,11 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.usersContractsForMe}",
-        options: Options(headers: {
-          "Authorization": "Bearer ${localSource.accessToken}",
-        }),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       final list = <ForMeHistoryResponse>[];
       final data = response.data as List<dynamic>;
-      for (final e in data as Iterable) {
-        list.add(ForMeHistoryResponse.fromJson(e));
-      }
+      for (final e in data as Iterable) { list.add(ForMeHistoryResponse.fromJson(e)); }
       return Right(list);
     } on DioException catch (error, stacktrace) {
       log("Exception occurred -: $error stacktrace: $stacktrace");
@@ -278,15 +257,11 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.usersContractsMyCreated}",
-        options: Options(headers: {
-          "Authorization": "Bearer ${localSource.accessToken}",
-        }),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       final list = <ForMeHistoryResponse>[];
       final data = response.data as List<dynamic>;
-      for (final e in data as Iterable) {
-        list.add(ForMeHistoryResponse.fromJson(e));
-      }
+      for (final e in data as Iterable) { list.add(ForMeHistoryResponse.fromJson(e)); }
       return Right(list);
     } on DioException catch (error, stacktrace) {
       log("Exception occurred -: $error stacktrace: $stacktrace");
@@ -303,11 +278,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.usersContractsPaymentStatus}/$id/payment-status",
-        options: Options(
-          headers: {
-            "Authorization": "Bearer ${localSource.accessToken}"
-          },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return Right(PaymentResponse.fromJson(response.data));
     } on DioException catch (error, stacktrace) {
@@ -325,9 +296,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.usersSearch}",
-        options: Options(
-          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
         queryParameters: { "query": search }
       );
       return Right(UsersSearchResponse.fromJson(response.data));
@@ -346,11 +315,9 @@ class RepositoryImpl implements Repository {
   @override
   Future<Either<Failure, String>> sendCreatorApprovalCode({required int id}) async {
     try {
-      final Response response = await dio.post(
+      await dio.post(
         "${Constants.baseUrl}${Urls.usersContracts}/$id/send-creator-approval-code",
-        options: Options(
-          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return const Right("Tasdiqlash kodi yuborildi");
     } on DioException catch (error, stacktrace) {
@@ -367,9 +334,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.post(
         "${Constants.baseUrl}${Urls.usersContracts}/$id/verify-and-approve-as-creator",
-        options: Options(
-          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
         queryParameters: { "code": code }
       );
       return Right(CreateContractsResponse.fromJson(response.data));
@@ -386,10 +351,8 @@ class RepositoryImpl implements Repository {
   Future<Either<Failure, int>> getUnreadCount() async {
     try {
       final Response response = await dio.get(
-          "${Constants.baseUrl}${Urls.notificationsUnreadCount}",
-          options: Options(
-            headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-          ),
+        "${Constants.baseUrl}${Urls.notificationsUnreadCount}",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return Right(response.data["unreadCount"]);
     } on DioException catch (error, stacktrace) {
@@ -407,15 +370,11 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.news}",
-        options: Options(headers: {
-          "Authorization": "Bearer ${localSource.accessToken}",
-        }),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       final list = <NewsResponse>[];
       final data = response.data as List<dynamic>;
-      for (final e in data as Iterable) {
-        list.add(NewsResponse.fromJson(e));
-      }
+      for (final e in data as Iterable) { list.add(NewsResponse.fromJson(e)); }
       return Right(list);
 
     } on DioException catch (error, stacktrace) {
@@ -434,9 +393,7 @@ class RepositoryImpl implements Repository {
     try {
       await dio.post(
         "${Constants.baseUrl}${Urls.news}/$id/view",
-        options: Options(
-          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return const Right(true);
     } on DioException catch (error, stacktrace) {
@@ -454,9 +411,7 @@ class RepositoryImpl implements Repository {
     try {
       final Response response = await dio.get(
         "${Constants.baseUrl}${Urls.notifications}",
-        options: Options(
-          headers: { "Authorization": "Bearer ${localSource.accessToken}" },
-        ),
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return Right(AllNotificationsResponse.fromJson(response.data));
     } on DioException catch (error, stacktrace) {
@@ -469,6 +424,78 @@ class RepositoryImpl implements Repository {
   }
 
 
+  @override
+  Future<Either<Failure, bool>> editNotificationIsRead({required int id, required bool allRead}) async {
+    try {
+      var endpoint = "";
+      endpoint = allRead ? "/mark-all-read" : "/$id/mark-read";
+      await dio.put(
+        "${Constants.baseUrl}${Urls.notifications}$endpoint",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+      );
+      return const Right(true);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, bool>> sendFCMToken() async {
+    try {
+      await dio.post(
+        "${Constants.baseUrl}${Urls.premiumFcmToken}",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+        queryParameters: { "fcmToken": localSource.fcmToken }
+      );
+      return const Right(true);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, CreateContractsResponse>> getContractDetail({required int id}) async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.usersContracts}/$id",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+      );
+      return Right(CreateContractsResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteContractNotification({required int id}) async {
+    try {
+      await dio.delete(
+        "${Constants.baseUrl}${Urls.usersContracts}/$id/cancel",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+      );
+      return const Right(true);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
 
 
 

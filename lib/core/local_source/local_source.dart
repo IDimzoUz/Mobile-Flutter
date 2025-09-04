@@ -86,6 +86,11 @@ final class LocalSource {
   }
   String? get language => box.get(AppKeys.language);
 
+  Future<void> setFcmToken(String token) async {
+    await box.put(AppKeys.fcmToken, token);
+  }
+  String? get fcmToken => box.get(AppKeys.fcmToken, defaultValue: "");
+
 
 
   Future<void> clear() async {

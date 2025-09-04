@@ -34,3 +34,9 @@ final class SendNewsViewEvent extends HomePageEvent {
   @override
   List<Object?> get props => [ id ];
 }
+
+final class PostFCMTokenEvent extends HomePageEvent {
+  const PostFCMTokenEvent();
+  @override
+  List<Object?> get props => <Object?>[ ];
+}

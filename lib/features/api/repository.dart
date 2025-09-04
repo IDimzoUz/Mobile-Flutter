@@ -37,6 +37,10 @@ const Repository();
   Future<Either<Failure, AllNotificationsResponse>> getNotifications();
   Future<Either<Failure, List<NewsResponse>>> getNews();
   Future<Either<Failure, bool>> sendNewsView({required int id});
+  Future<Either<Failure, bool>> deleteContractNotification({required int id});
+  Future<Either<Failure, CreateContractsResponse>> getContractDetail({required int id});
+  Future<Either<Failure, bool>> sendFCMToken();
+  Future<Either<Failure, bool>> editNotificationIsRead({required int id, required bool allRead});
 
 
 

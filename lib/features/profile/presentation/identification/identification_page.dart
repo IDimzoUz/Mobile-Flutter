@@ -11,6 +11,7 @@ import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/core/widgets/inputs/custom_text_field.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
+import "package:imzo/features/history/presentation/pages/widgets/text_dialog.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
 import "package:imzo/features/profile/model/edit_me_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
@@ -148,6 +149,18 @@ class _PageState extends State<IdentificationPage> {
         "Прохождение идентификации",
         style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
       ),
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await showDialog<void>(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => const TextDialog(title: "Iltimos, ushbu hujjatlarni diqqat bilan o‘qing. Ular sizning shaxsiy ma’lumotlaringizni qanday saqlashimiz va ilovadan qanday foydalanishingiz haqida ma’lumot beradi")
+            );
+          },
+          icon: SvgPicture.asset(SvgIcons.icInfoCircle),
+        ),
+      ],
     ),
     body: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

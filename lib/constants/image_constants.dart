@@ -54,5 +54,7 @@ sealed class SvgIcons {
   static const String icMyId = "assets/images/svg/ic_myid.svg";
   static const String icOneId = "assets/images/svg/ic_oneid.svg";
   static const String icChecks = "assets/images/svg/ic_checks.svg";
+  static const String icRouteBlock = "assets/images/svg/ic_route_block.svg";
+  static const String icTaskDone = "assets/images/svg/ic_task_done.svg";
 
 }

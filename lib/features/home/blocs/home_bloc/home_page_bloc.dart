@@ -17,6 +17,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<GetNotificationUnreadCountEvent>(_getNotificationUnreadCount);
     on<GetNewsEvent>(_getNews);
     on<SendNewsViewEvent>(_sendNewsView);
+    on<PostFCMTokenEvent>(_postFCMToken);
   }
 
   final Repository repository;
@@ -64,6 +65,11 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
 
   Future<void> _sendNewsView(SendNewsViewEvent event, Emitter<HomePageState> emit) async {
     final result = await repository.sendNewsView(id: event.id);
+    await result.fold( (Failure left) { }, (bool right) async { } );
+  }
+
+  Future<void> _postFCMToken(PostFCMTokenEvent event, Emitter<HomePageState> emit) async {
+    final result = await repository.sendFCMToken();
     await result.fold( (Failure left) { }, (bool right) async { } );
   }
 

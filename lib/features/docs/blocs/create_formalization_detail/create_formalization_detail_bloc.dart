@@ -14,21 +14,19 @@ part "create_formalization_detail_state.dart";
 
 class CreateFormalizationDetailBloc extends Bloc<CreateFormalizationDetailEvent, CreateFormalizationDetailState> {
   CreateFormalizationDetailBloc({required this.repository}) : super(const CreateFormalizationDetailState(status: ApiStatus.initial)) {
-    // on<CreateContractsEvent>(_createContracts);
+    on<GetContractDetailIdEvent>(_getContractDetail);
   }
 
   final Repository repository;
 
-  // Future<void> _getContractsTemplates(GetContractsTemplatesEvent event, Emitter<CreateFormalizationState> emit) async {
-  //   emit(const CreateFormalizationState(status: ApiStatus.loading));
-  //   final result = await repository.getContractsTemplates(langId: event.langId);
-  //   await result.fold(
-  //         (Failure left) { emit(const CreateFormalizationState(status: ApiStatus.error)); },
-  //         (ContractsTemplatesResponse right) async {
-  //       emit(CreateFormalizationState(status: ApiStatus.success, contractsTemplatesResponse: right));
-  //     },
-  //   );
-  // }
+  Future<void> _getContractDetail(GetContractDetailIdEvent event, Emitter<CreateFormalizationDetailState> emit) async {
+    emit(state.copyWith(status: ApiStatus.loading));
+    final Either<Failure, CreateContractsResponse> result = await repository.getContractDetail(id: event.id);
+    result.fold(
+       (Failure failure) => emit(state.copyWith(status: ApiStatus.error)),
+       (CreateContractsResponse right) => emit(state.copyWith(createContractsResponse: right, status: ApiStatus.success))
+    );
+  }
 
 
 }

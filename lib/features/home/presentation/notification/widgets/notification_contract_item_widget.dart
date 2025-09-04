@@ -1,25 +1,43 @@
 import "package:flutter/material.dart";
+import "package:imzo/core/extension/extension.dart";
 import "package:imzo/core/utils/app_colors.dart";
 import "package:imzo/core/utils/utils.dart";
 import "package:imzo/core/widgets/bottom_sheet/custom_bottom_sheet.dart";
 import "package:imzo/core/widgets/buttons/custom_button.dart";
+import "package:imzo/features/home/model/notifications_response.dart";
 import "package:imzo/features/home/presentation/notification/widgets/notification_note_bottom_sheet.dart";
 
 class NotificationContractItemWidget extends StatelessWidget {
-  const NotificationContractItemWidget({super.key, this.title});
-  final String? title;
+  const NotificationContractItemWidget({super.key, this.data, this.onTapOpen});
+
+  final Content? data;
+  final VoidCallback? onTapOpen;
+
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.only(left: 24, right: 24, top: 24),
-    color: AppColors.baseColor.withOpacity(0.08),
+    color: (data?.isRead ?? true) ? AppColors.opacity : AppColors.baseColor.withOpacity(0.08),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppUtils.kGap8,
-        const Text(
-          "Прибыл новый контракт, ожидающий вашего подтверждения",
-          textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Text(
+                data?.title ?? "",
+                textAlign: TextAlign.start,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+            ),
+            Text(
+              formatTimeAgo(data?.createdAt ?? ""),
+              textAlign: TextAlign.start,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            ),
+          ],
         ),
         AppUtils.kGap8,
         Row(
@@ -28,9 +46,7 @@ class NotificationContractItemWidget extends StatelessWidget {
               width: 120,
               height: 38,
               borderRadius: AppUtils.kBorderRadius8,
-              onPressed: () {
-
-              },
+              onPressed: onTapOpen,
               label: const Text(
                 "Открытие",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),

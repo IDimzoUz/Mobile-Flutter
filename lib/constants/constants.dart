@@ -50,6 +50,8 @@ sealed class AppKeys {
   static const String language = "language";
   static const String phoneNumber = "phoneNumber";
   static const String verify = "verify";
+  static const String fcmToken = "fcmToken";
+
 
 }
 
@@ -73,6 +75,7 @@ sealed class Urls {
   static const String notificationsUnread = "/api/notifications/unread";
   static const String notifications = "/api/notifications";
   static const String news = "/api/news";
+  static const String premiumFcmToken = "/api/premium/fcm-token";
 
 
 

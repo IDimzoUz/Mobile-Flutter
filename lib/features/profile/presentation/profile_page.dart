@@ -86,6 +86,7 @@ class _PageState extends State<ProfilePage> with ProfileMixin {
               onPressed: () {
                 localSource.box.clear();
                 localSource.setVerification(value: false);
+                context.goNamed(Routes.languagePage);
               },
               label: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

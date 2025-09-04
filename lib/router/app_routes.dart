@@ -23,7 +23,8 @@ import "package:imzo/features/docs/presentation/formalization/formalization_page
 import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/features/docs/presentation/select_lang_docs/select_lang_docs_page.dart";
 import "package:imzo/features/docs/presentation/select_payment_verify/select_payment_verify_page.dart";
-import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
+import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_bloc.dart";
+import "package:imzo/features/history/presentation/bloc/history_bloc/history_bloc.dart";
 import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
 import "package:imzo/features/history/presentation/pages/contract_detail/contract_detail_page.dart";
 import "package:imzo/features/history/presentation/pages/history_detail/history_detail_page.dart";
@@ -241,7 +242,7 @@ final GoRouter router = GoRouter(
           state: state,
           child: BlocProvider<OtpBloc>(
             create: (_) => sl<OtpBloc>(),
-            child: CreateOtpPage(id: state.extra! as int)
+            child: CreateOtpPage(createContractsResponse: state.extra! as CreateContractsResponse)
           )
       ),
     ),
@@ -324,11 +325,12 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
           context: context,
           state: state,
-          child: ContractDetailPage(content: state.extra! as ForMeHistoryResponse)
+          child: BlocProvider<ContractDetailBloc>(
+              create: (_) => sl<ContractDetailBloc>(),
+              child: ContractDetailPage(contractId: state.extra! as int)
+          )
       ),
     ),
-
-
 
 
 

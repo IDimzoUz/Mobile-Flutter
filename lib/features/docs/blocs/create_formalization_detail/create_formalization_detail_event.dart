@@ -4,10 +4,10 @@ sealed class CreateFormalizationDetailEvent extends Equatable {
   const CreateFormalizationDetailEvent();
 }
 
-// final class GetContractsTemplatesEvent extends CreateFormalizationEvent {
-//   const GetContractsTemplatesEvent({required this.langId});
-//   final int langId;
-//   @override
-//   List<Object?> get props => [ langId ];
-// }
 
+final class GetContractDetailIdEvent extends CreateFormalizationDetailEvent {
+  const GetContractDetailIdEvent({required this.id});
+  final int id;
+  @override
+  List<Object?> get props => [ id ];
+}

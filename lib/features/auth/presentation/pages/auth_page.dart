@@ -25,6 +25,7 @@ class _AuthPageState extends State<AuthPage> with AuthMixin {
 
   late bool checkBoxPolicy = false;
 
+
   @override
   Widget build(BuildContext context) => BlocListener<AuthBloc, AuthState>(
     listener: (BuildContext context, AuthState state) async {
@@ -187,7 +188,7 @@ class _AuthPageState extends State<AuthPage> with AuthMixin {
             ),
           ),
         ),
-      )
+      ),
   );
 }
 

@@ -13,14 +13,15 @@ import "package:imzo/features/auth/data/login/login_user_response.dart";
 import "package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart";
 import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
 import "package:imzo/features/auth/presentation/widgets/progress_indicator.dart";
+import "package:imzo/features/docs/model/create_contracts_response.dart";
 import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/router/app_routes.dart";
 import "package:pin_input_text_field/pin_input_text_field.dart";
 
 
 class CreateOtpPage extends StatefulWidget {
-  const CreateOtpPage({super.key, required this.id});
-  final int id;
+  const CreateOtpPage({super.key, required this.createContractsResponse});
+  final CreateContractsResponse? createContractsResponse;
   @override
   State<CreateOtpPage> createState() => _PageState();
 }
@@ -37,7 +38,11 @@ class _PageState extends State<CreateOtpPage> {
   void initState() {
     super.initState();
     startTimer();
-    context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.id));
+    context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
+  }
+
+  void sendStatusCode() {
+
   }
 
   void startTimer() {
@@ -70,7 +75,8 @@ class _PageState extends State<CreateOtpPage> {
       listener: (BuildContext context, OtpState state) async {
         if (state.status == ApiStatus.success) {
           if (state.verifyApproveCodeResponse != null) {
-            context.pushNamed(Routes.myPaid, extra: PaidModel(title: state.verifyApproveCodeResponse?.templateName ?? "", id: state.verifyApproveCodeResponse?.contractId ?? 0));
+            context.pop();
+            context.pop();
           }
         } else if (state.status == ApiStatus.error) {
           otpColor = AppColors.red;
@@ -184,7 +190,7 @@ class _PageState extends State<CreateOtpPage> {
                     _seconds = 60;
                     startTimer();
                     sendCode = true;
-                    context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.id));
+                    if (widget.createContractsResponse?.creatorApproved ?? false) context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
                     setState(() {});
                   },
                   icon: SvgPicture.asset(SvgIcons.icReload),
@@ -207,7 +213,7 @@ class _PageState extends State<CreateOtpPage> {
                 onPressed: () {
                   setState(() {
                     if (controller.text.length == 4 && state.status != ApiStatus.loading) {
-                      context.read<OtpBloc>().add(SendVerifyAndApproveAsCreatorEvent(code: controller.text, id: widget.id));
+                      if (widget.createContractsResponse?.creatorApproved ?? false) context.read<OtpBloc>().add(SendVerifyAndApproveAsCreatorEvent(code: controller.text, id: widget.createContractsResponse?.contractId ?? 0));
                     }
                   });
                 },

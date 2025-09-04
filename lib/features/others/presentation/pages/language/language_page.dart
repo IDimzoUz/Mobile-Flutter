@@ -9,6 +9,8 @@ import "package:imzo/core/widgets/buttons/custom_button.dart";
 import "package:imzo/features/others/presentation/pages/language/widgets/lan_checkbox_widget.dart";
 import "package:imzo/router/app_routes.dart";
 
+import "../../../../history/presentation/pages/widgets/text_dialog.dart";
+
 
 class SelectLanguageData {
   SelectLanguageData( this.name, this.isCheck, this.icon );
@@ -44,7 +46,16 @@ class _PageState extends State<LanguagePage> {
     appBar: AppBar(
       leading: const SizedBox(),
       actions: [
-        IconButton(onPressed: () {  }, icon: SvgPicture.asset(SvgIcons.icInfoCircle)),
+        IconButton(
+          onPressed: () async {
+            await showDialog<void>(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => const TextDialog(title: "Tanlangan til ilova interfeysi uchun ishlatiladi. Tilni keyinchalik sozlamalarda o‘zgartirishingiz mumkin")
+            );
+          },
+          icon: SvgPicture.asset(SvgIcons.icInfoCircle),
+        ),
         const SizedBox(width: 5)
       ],
     ),

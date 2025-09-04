@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> with HomeMixin {
     context.read<HomePageBloc>().add(const GetCategoryEvent());
     context.read<HomePageBloc>().add(const GetHomeMeEvent());
     context.read<HomePageBloc>().add(const GetNewsEvent());
+    if (localSource.fcmToken?.isNotEmpty ?? false) context.read<HomePageBloc>().add(const PostFCMTokenEvent());
   }
 
   @override

@@ -7,7 +7,7 @@ import 'package:imzo/core/widgets/inputs/custom_text_field.dart';
 import 'package:imzo/features/docs/model/contract_templates_response.dart';
 
 class MoneyTextFieldItemWidget extends StatefulWidget {
-  const MoneyTextFieldItemWidget({super.key, this.fields, required this.data, this.controller,});
+  const MoneyTextFieldItemWidget({super.key, this.fields, required this.data, this.controller});
   final Fields? fields;
   final Function(String dataText) data;
   final TextEditingController? controller; // ✅ Controller tashqaridan

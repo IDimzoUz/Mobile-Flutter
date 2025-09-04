@@ -100,7 +100,7 @@ class _JobsDetailPageState extends State<NewsDetailPage> with SingleTickerProvid
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: AppColors.white),
               ),
               onPressed: () {
-                launchUrl(Uri.parse("https://kasb.maktab.uz/news/${widget.newsDetail?.externalLink ?? ""}"));
+                launchUrl(Uri.parse(widget.newsDetail?.externalLink ?? ""));
               },
             ),
           ),

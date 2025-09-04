@@ -10,3 +10,4 @@ final class AuthLoginEvent extends AuthEvent {
   @override
   List<Object?> get props => <Object?>[ phoneNumber ];
 }
+

@@ -215,11 +215,17 @@ sealed class NotificationService {
         final String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
         if (apnsToken != null) {
           // ignore: unawaited_futures
-          FirebaseMessaging.instance.getAPNSToken().then((String? token) => log('FCM TOKEN: $token'));
+          FirebaseMessaging.instance.getAPNSToken().then((String? token) async {
+            log('FCM TOKEN: $token');
+            await localSource.setFcmToken(token ?? "");
+          });
         }
       } else {
         // ignore: unawaited_futures
-        FirebaseMessaging.instance.getToken().then((String? token) => log('FCM TOKEN: $token'));
+        FirebaseMessaging.instance.getToken().then((String? token) async {
+          log('FCM TOKEN: $token');
+          await localSource.setFcmToken(token ?? "");
+        });
       }
     } on Exception catch (e, s) {
       log('Firebase initialize error: $e $s');
@@ -268,16 +274,16 @@ sealed class NotificationService {
     if (message.data.isNotEmpty && localSource.accessToken.isNotEmpty) {
       flutterLocalNotificationsPlugin.show(
         message.hashCode,
-        message.data['title'],
-        message.data['body'],
+        message.notification?.title,
+        message.notification?.body,
         NotificationDetails(
           android: AndroidNotificationDetails(
             channel.id,
             channel.name,
             channelDescription: channel.description,
             styleInformation: BigTextStyleInformation(
-              message.data['body'] ?? '',
-              contentTitle: message.data['title'],
+              message.notification?.body ?? '',
+              contentTitle: message.notification?.title,
             ),
             icon: '@mipmap/ic_launcher',
             priority: Priority.max,
@@ -289,15 +295,11 @@ sealed class NotificationService {
             presentBadge: true,
             presentSound: true,
             sound: 'default',
-
           ),
         ),
-        payload: message.data['route'],
+        // payload: message.data['route'],
       );
     }
-
-
-
   }
 
   static Future<void> foregroundNotification() async {

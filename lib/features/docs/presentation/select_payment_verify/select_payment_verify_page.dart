@@ -131,9 +131,10 @@ class _PageState extends State<SelectPaymentVerifyPage> {
           if (select) {
 
           } else {
-            context.pushNamed(Routes.createOtpPage, extra: widget.response?.contractId ?? 0);
+            print("Подтвердить creatorApproved ${widget.response?.creatorApproved}");
+            print("Подтвердить recipientApproved ${widget.response?.recipientApproved}");
+            context.pushNamed(Routes.createOtpPage, extra: widget.response);
           }
-          // context.pushNamed(Routes.myPaid, extra: PaidModel(title: widget.response?.templateName ?? "", id: widget.response?.contractId ?? 0));
         },
         width: double.infinity,
         label: const Text('Подтвердить'),

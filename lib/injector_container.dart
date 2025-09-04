@@ -15,13 +15,14 @@ import "package:imzo/features/docs/blocs/docs/docs_page_bloc.dart";
 import "package:imzo/features/docs/blocs/formalization/formalization_bloc.dart";
 import "package:imzo/features/docs/blocs/my_paid/my_paid_bloc.dart";
 import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
-import "package:imzo/features/history/presentation/bloc/history_bloc.dart";
 import "package:hive/hive.dart";
 import "package:imzo/core/connectivity/network_info.dart";
 import "package:imzo/core/local_source/local_source.dart";
 import "package:imzo/features/api/repository.dart";
 import "package:imzo/features/api/repository_impl.dart";
 import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
+import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_bloc.dart";
+import "package:imzo/features/history/presentation/bloc/history_bloc/history_bloc.dart";
 import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
 import "package:imzo/features/home/blocs/notification_bloc/notification_bloc.dart";
 import "package:imzo/features/main/presentation/bloc/main_bloc.dart";
@@ -160,6 +161,7 @@ void _authFeature() {
     ..registerFactory(() => AuthBloc(authRepository: sl()))
     ..registerFactory(() => OtpBloc(repository: sl()))
     ..registerFactory(() => HistoryBloc(repository: sl()))
+    ..registerFactory(() => ContractDetailBloc(repository: sl()))
     ..registerFactory(() => ProfilePageBloc(repository: sl()))
     ..registerFactory(() => IdentificationBloc(repository: sl()))
     ..registerFactory(() => DocsPageBloc(repository: sl()))

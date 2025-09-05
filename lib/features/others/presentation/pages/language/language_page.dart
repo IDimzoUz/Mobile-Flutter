@@ -11,7 +11,6 @@ import "package:imzo/router/app_routes.dart";
 
 import "../../../../history/presentation/pages/widgets/text_dialog.dart";
 
-
 class SelectLanguageData {
   SelectLanguageData( this.name, this.isCheck, this.icon );
   String name;
@@ -29,8 +28,7 @@ class _PageState extends State<LanguagePage> {
 
   List<SelectLanguageData> items = [
     SelectLanguageData("O’zbekcha", localSource.language == 'uz' ? true : false, ImagesUrl.icUz),
-    SelectLanguageData("Ўзбекча", localSource.language == 'cryl' ? true : false, ImagesUrl.icUz),
-    SelectLanguageData("Qaraqalpaq", localSource.language == 'qr' ? true : false, ImagesUrl.icQr),
+    SelectLanguageData("Ўзбекча", localSource.language == 'uz_cyrl' ? true : false, ImagesUrl.icUz),
     SelectLanguageData("Русские", localSource.language == 'ru' ? true : false, ImagesUrl.icRu),
     SelectLanguageData("English", localSource.language == 'en'? true : false, ImagesUrl.icEn),
   ];
@@ -66,8 +64,8 @@ class _PageState extends State<LanguagePage> {
         children: [
           Center(
             child: Text(
-              'Tilni tanlang',
-              style: TextStyle(
+              context.tr("select_language"),
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w700
               ),
@@ -75,13 +73,13 @@ class _PageState extends State<LanguagePage> {
           ),
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 55, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 12),
               child: Text(
-                'Ilova interfeysi siz tanlagan tilda ishlashda davom etadi.',
+                context.tr("app_interfeys_desc"),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                   color: AppColors.baseGray
                 ),
               ),
@@ -98,21 +96,24 @@ class _PageState extends State<LanguagePage> {
               image: items[index].icon,
               onTap: () async {
                 if (index == 0) {
-                  context.setLocale(const Locale('en'));
-                  await localSource.setLanguage('en');
-                } else if (index == 1) {
                   context.setLocale(const Locale('uz'));
                   await localSource.setLanguage('uz');
+                } else if (index == 1) {
+                  context.setLocale(const Locale('uz', 'Cyrl'));
+                  await localSource.setLanguage('uz_cyrl');
                 } else if (index == 2) {
                   context.setLocale(const Locale('ru'));
                   await localSource.setLanguage('ru');
+                } else if (index == 3) {
+                  context.setLocale(const Locale('en'));
+                  await localSource.setLanguage('en');
                 }
                 setState(() {
                   checked(index);
                 });
               }, title: items[index].name
             ),
-          )
+          ),
         ],
       ),
     ),
@@ -120,7 +121,7 @@ class _PageState extends State<LanguagePage> {
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 54),
       child: CustomButton(
         onPressed: () => context.pushNamed(Routes.auth),
-        label: Text("Keyingisi"),
+        label: const Text("Keyingisi"),
       ),
     ),
   );

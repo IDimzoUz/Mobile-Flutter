@@ -40,6 +40,7 @@ import "package:imzo/features/main/presentation/pages/main_page.dart";
 import "package:imzo/features/others/presentation/pages/internet_connection/internet_connection_page.dart";
 import "package:imzo/features/others/presentation/pages/language/language_page.dart";
 import "package:imzo/features/others/presentation/pages/splash/splash_page.dart";
+import "package:imzo/features/profile/blocs/history_balance_bloc/history_balance_bloc.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
 import "package:imzo/features/profile/model/user_me_response.dart";
 import "package:imzo/features/profile/presentation/edit_profile/edit_profile_page.dart";
@@ -251,7 +252,10 @@ final GoRouter router = GoRouter(
       path: Routes.historyBalansPage,
       name: Routes.historyBalansPage,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (_, __) => const HistoryBalansPage(),
+      builder: (_, __) => BlocProvider<HistoryBalanceBloc>(
+            create: (_) => sl<HistoryBalanceBloc>(),
+            child: const HistoryBalansPage()
+        )
     ),
 
 
@@ -327,11 +331,10 @@ final GoRouter router = GoRouter(
           state: state,
           child: BlocProvider<ContractDetailBloc>(
               create: (_) => sl<ContractDetailBloc>(),
-              child: ContractDetailPage(contractId: state.extra! as int)
+              child: ContractDetailPage(dataResponse: state.extra! as ForMeHistoryResponse)
           )
       ),
     ),
-
 
 
 

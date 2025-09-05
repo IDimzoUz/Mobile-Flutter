@@ -47,7 +47,7 @@ class AllNotificationsResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['totalElements'] = this.totalElements;
     data['totalPages'] = this.totalPages;
     if (this.pageable != null) {

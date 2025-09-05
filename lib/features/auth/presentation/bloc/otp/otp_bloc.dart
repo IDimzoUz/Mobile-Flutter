@@ -16,6 +16,8 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
     on<SendLoginEvent>(_sendLogin);
     on<SendCreatorApprovalCodeEvent>(_sendCreatorApprovalCode);
     on<SendVerifyAndApproveAsCreatorEvent>(_sendVerifyAndApproveAsCreatorCode);
+    on<SendRecipientApprovalCodeEvent>(_sendRecipientApprovalCode);
+    on<SendVerifyAndApproveAsRecipientEvent>(_sendVerifyAndApproveAsRecipientCode);
   }
 
   final Repository repository;
@@ -58,6 +60,29 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
   Future<void> _sendVerifyAndApproveAsCreatorCode(SendVerifyAndApproveAsCreatorEvent event, Emitter<OtpState> emit) async {
     emit(const OtpState(status: ApiStatus.loading));
     final result = await repository.sendVerifyAndApproveAsCreator(id: event.id, code: event.code);
+    await result.fold(
+          (Failure left) {emit(OtpState(status: ApiStatus.error, message: left.message)); },
+          (CreateContractsResponse right) async {
+        emit(OtpState(status: ApiStatus.success, verifyApproveCodeResponse: right));
+      },
+    );
+  }
+
+
+  Future<void> _sendRecipientApprovalCode(SendRecipientApprovalCodeEvent event, Emitter<OtpState> emit) async {
+    emit(const OtpState(status: ApiStatus.loading));
+    final result = await repository.sendRecipientApprovalCode(id: event.id);
+    await result.fold(
+          (Failure left) {emit(OtpState(status: ApiStatus.error, message: left.message)); },
+          (String right) async {
+        emit(OtpState(status: ApiStatus.success, creatorApprovalCodeResponse: right));
+      },
+    );
+  }
+
+  Future<void> _sendVerifyAndApproveAsRecipientCode(SendVerifyAndApproveAsRecipientEvent event, Emitter<OtpState> emit) async {
+    emit(const OtpState(status: ApiStatus.loading));
+    final result = await repository.sendVerifyAndApproveAsRecipient(id: event.id, code: event.code);
     await result.fold(
           (Failure left) {emit(OtpState(status: ApiStatus.error, message: left.message)); },
           (CreateContractsResponse right) async {

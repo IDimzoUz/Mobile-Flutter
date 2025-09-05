@@ -18,6 +18,7 @@ import "package:imzo/features/home/model/category_response.dart";
 import "package:imzo/features/home/model/news_response.dart";
 import "package:imzo/features/home/model/notifications_response.dart";
 import "package:imzo/features/profile/model/edit_me_response.dart";
+import "package:imzo/features/profile/model/history_balance_response.dart";
 import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
 import "package:imzo/features/profile/model/user_me_response.dart";
@@ -309,9 +310,6 @@ class RepositoryImpl implements Repository {
     }
   }
 
-
-
-
   @override
   Future<Either<Failure, String>> sendCreatorApprovalCode({required int id}) async {
     try {
@@ -488,6 +486,62 @@ class RepositoryImpl implements Repository {
         options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
       );
       return const Right(true);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> sendRecipientApprovalCode({required int id}) async {
+    try {
+      await dio.post(
+        "${Constants.baseUrl}${Urls.usersContracts}/$id/send-recipient-approval-code",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+      );
+      return const Right("Tasdiqlash kodi yuborildi");
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, CreateContractsResponse>> sendVerifyAndApproveAsRecipient({required int id, required String code}) async {
+    try {
+      final Response response = await dio.post(
+          "${Constants.baseUrl}${Urls.usersContracts}/$id/verify-and-approve-as-recipient",
+          options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+          queryParameters: { "code": code }
+      );
+      return Right(CreateContractsResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, List<HistoryBalanceResponse>>> getHistoryBalance() async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.spendingByProduct}",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+      );
+      final list = <HistoryBalanceResponse>[];
+      final data = response.data as List<dynamic>;
+      for (final e in data as Iterable) { list.add(HistoryBalanceResponse.fromJson(e)); }
+      return Right(list);
     } on DioException catch (error, stacktrace) {
       log("Exception occurred -: $error stacktrace: $stacktrace");
       return Left(ServerError.withDioError(error: error).failure);

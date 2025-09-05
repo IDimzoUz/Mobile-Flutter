@@ -38,8 +38,7 @@ class AppOptions extends Equatable {
   AppOptions copyWith({
     ThemeMode? themeMode,
     Locale? locale,
-  }) =>
-      AppOptions(
+  }) => AppOptions(
         themeMode: themeMode ?? this.themeMode,
         locale: locale ?? this.locale,
       );

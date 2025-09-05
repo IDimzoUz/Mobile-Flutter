@@ -4,6 +4,7 @@ import "dart:convert" show json;
 import "package:flutter/cupertino.dart";
 import "package:flutter/services.dart" show rootBundle;
 import "package:flutter_localizations/flutter_localizations.dart";
+import "package:imzo/router/app_routes.dart";
 
 part "app_localizations_delegate.dart";
 
@@ -16,6 +17,7 @@ class AppLocalizationsSetup {
     Locale("en"),
     Locale("ru"),
     Locale("uz"),
+    Locale('uz', 'Cyrl'),
   ];
 
   static const Iterable<LocalizationsDelegate<dynamic>> localizationsDelegates =

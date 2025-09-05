@@ -75,7 +75,7 @@ void main() async {
     ModelBinding(
       initialModel: AppOptions(
         themeMode: ThemeMode.light,
-        locale: Locale(localSource.locale),
+        locale: localSource.language == "uz_cyrl" ? const Locale('uz', 'Cyrl') :  Locale(localSource.locale),
       ),
       child: const App(),
     ),

@@ -50,7 +50,7 @@ class _PageState extends State<ProfilePage> with ProfileMixin {
                     color: AppColors.baseColor.withOpacity(0.08),
                     borderRadius: const BorderRadius.horizontal(left: Radius.circular(16), right: Radius.circular(16))
                   ),
-                  child: MeProfileWidget(data: state.userMeResponse, editButton: true),
+                  child: MeProfileWidget(data: state.userMeResponse, editButton: true, onTap: () => context.pushNamed(Routes.editProfilePage, extra: state.userMeResponse)),
                 ),
                 Flexible(
                   child: ListView.separated(

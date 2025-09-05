@@ -65,7 +65,7 @@ class _PageState extends State<ApprovedDialog> {
                 Flexible(
                   child: CustomButton(
                     backgroundColor: AppColors.opacity,
-                    onPressed: () => (!widget.approved) ? context.pop() : null,
+                    onPressed: () => context.pop(),
                     label: Text(
                       "Qaytish",
                       style: TextStyle(
@@ -82,7 +82,7 @@ class _PageState extends State<ApprovedDialog> {
                 Flexible(
                   child: CustomButton(
                     backgroundColor: AppColors.opacity,
-                    onPressed: () => (widget.approved) ? widget.onTap : null,
+                    onPressed: () => (widget.approved) ? widget.onTap!() : null,
                     label: Text(
                       "Davom etish",
                       style: TextStyle(color: widget.approved ? AppColors.baseColor : AppColors.grey2),

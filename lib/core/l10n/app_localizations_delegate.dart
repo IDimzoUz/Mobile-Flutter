@@ -4,8 +4,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>["ru", "uz", "en"].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>["ru", "uz", "en", "uz_cyrl"].contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) async {

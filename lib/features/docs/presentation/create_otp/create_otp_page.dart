@@ -36,12 +36,10 @@ class _PageState extends State<CreateOtpPage> {
   void initState() {
     super.initState();
     startTimer();
-    context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
+    if (widget.createContractsResponse?.status == "PENDING") context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
+    if (widget.createContractsResponse?.status == "CREATOR_APPROVED") context.read<OtpBloc>().add(SendRecipientApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
   }
 
-  void sendStatusCode() {
-
-  }
 
   void startTimer() {
     Timer.periodic(const Duration(seconds: 1), (Timer timer) {
@@ -188,7 +186,8 @@ class _PageState extends State<CreateOtpPage> {
                     _seconds = 60;
                     startTimer();
                     sendCode = true;
-                    if (widget.createContractsResponse?.creatorApproved ?? false) context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
+                    if (widget.createContractsResponse?.status == "PENDING") context.read<OtpBloc>().add(SendCreatorApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
+                    if (widget.createContractsResponse?.status == "CREATOR_APPROVED") context.read<OtpBloc>().add(SendRecipientApprovalCodeEvent(id: widget.createContractsResponse?.contractId ?? 0));
                     setState(() {});
                   },
                   icon: SvgPicture.asset(SvgIcons.icReload),
@@ -211,7 +210,8 @@ class _PageState extends State<CreateOtpPage> {
                 onPressed: () {
                   setState(() {
                     if (controller.text.length == 4 && state.status != ApiStatus.loading) {
-                      if (widget.createContractsResponse?.creatorApproved ?? false) context.read<OtpBloc>().add(SendVerifyAndApproveAsCreatorEvent(code: controller.text, id: widget.createContractsResponse?.contractId ?? 0));
+                      if (widget.createContractsResponse?.status == "PENDING") context.read<OtpBloc>().add(SendVerifyAndApproveAsCreatorEvent(code: controller.text, id: widget.createContractsResponse?.contractId ?? 0));
+                      if (widget.createContractsResponse?.status == "CREATOR_APPROVED") context.read<OtpBloc>().add(SendVerifyAndApproveAsRecipientEvent(code: controller.text, id: widget.createContractsResponse?.contractId ?? 0));
                     }
                   });
                 },

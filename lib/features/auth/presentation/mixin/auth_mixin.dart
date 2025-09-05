@@ -27,16 +27,16 @@ mixin AuthMixin on State<AuthPage> {
       final String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
       if (apnsToken != null) {
         // ignore: unawaited_futures
-        FirebaseMessaging.instance.getAPNSToken().then((String? token) async {
+        FirebaseMessaging.instance.getAPNSToken().then((String? token) {
           log('FCM TOKEN: $token');
-          await localSource.setFcmToken(token ?? "");
+          localSource.setFcmToken(token ?? "");
         });
       }
     } else {
       // ignore: unawaited_futures
-      FirebaseMessaging.instance.getToken().then((String? token) async {
+      FirebaseMessaging.instance.getToken().then((String? token) {
         log('FCM TOKEN: $token');
-        await localSource.setFcmToken(token ?? "");
+        localSource.setFcmToken(token ?? "");
       });
     }
   }

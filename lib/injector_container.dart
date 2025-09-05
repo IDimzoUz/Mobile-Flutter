@@ -26,6 +26,7 @@ import "package:imzo/features/history/presentation/bloc/history_bloc/history_blo
 import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
 import "package:imzo/features/home/blocs/notification_bloc/notification_bloc.dart";
 import "package:imzo/features/main/presentation/bloc/main_bloc.dart";
+import "package:imzo/features/profile/blocs/history_balance_bloc/history_balance_bloc.dart";
 import "package:imzo/features/profile/blocs/identification_bloc/identification_bloc.dart";
 import "package:imzo/features/profile/blocs/profile_bloc/profile_page_bloc.dart";
 import "package:imzo/router/app_routes.dart";
@@ -169,6 +170,7 @@ void _authFeature() {
     ..registerFactory(() => CreateFormalizationBloc(repository: sl()))
     ..registerFactory(() => CreateFormalizationDetailBloc(repository: sl()))
     ..registerFactory(() => MyPaidBloc(repository: sl()))
+    ..registerFactory(() => HistoryBalanceBloc(repository: sl()))
     ..registerFactory(() => NotificationBloc(repository: sl()))
     ..registerFactory(() => FormalizationBloc(repository: sl()))
     ..registerFactory(() => HomePageBloc(repository: sl()));

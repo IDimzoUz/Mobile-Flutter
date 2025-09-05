@@ -62,20 +62,20 @@ class _PageState extends State<EditProfilePage> {
                   ),
                 EditProfileItemWidget(
                     title: 'Дата рождения',
-                    desc: '14.05.1992',
+                    desc: widget.data?.birthDate ?? "",
                   ),
                 EditProfileItemWidget(
                     title: 'Пол',
-                    desc: 'Мужской',
+                    desc: widget.data?.gender == "MALE" ? 'Мужской' : "Женский",
                   ),
-                EditProfileItemWidget(
+                const EditProfileItemWidget(
                     title: 'Личность',
                     desc: 'Физическое лицо',
                   ),
-                EditProfileItemWidget(
+                if (widget.data?.address != null) EditProfileItemWidget(
                     title: 'Адрес',
-                    desc: 'Город Ташкент, Чиланзарский район, улица Мехр дом 56.',
-                  ),
+                    desc: widget.data?.address ?? "",
+                ) else SizedBox(),
               ],
             ),
           ),

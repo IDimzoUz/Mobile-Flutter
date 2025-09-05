@@ -1,3 +1,5 @@
 {
-  "settings": "Settings"
+  "settings": "Settings",
+  "select_language": "Select language",
+  "app_interfeys_desc": "The application interface will continue to work in the language you selected"
 }

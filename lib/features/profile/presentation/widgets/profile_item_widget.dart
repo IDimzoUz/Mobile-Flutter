@@ -43,7 +43,7 @@ class ProfileItemWidget extends StatelessWidget {
                               textAlign: TextAlign.start,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.grey2),
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.grey2),
                             ),
                           ],
                         ),

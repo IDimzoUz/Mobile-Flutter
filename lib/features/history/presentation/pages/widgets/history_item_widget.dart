@@ -14,6 +14,18 @@ class HistoryItemWidget extends StatelessWidget {
   final ForMeHistoryResponse? responseData;
   final GestureTapCallback onTap;
 
+  Color statusBgColor() {
+    switch (responseData?.status) {
+      case "PENDING": return AppColors.orange.withOpacity(0.75);
+      case "CREATOR_APPROVED": return AppColors.orangeStatus.withOpacity(0.75);
+      case "RECIPIENT_APPROVED": return AppColors.orangeStatus.withOpacity(0.75);
+      case "FULLY_APPROVED": return AppColors.greenStatus.withOpacity(0.75);
+      case "CANCELLED": return AppColors.red.withOpacity(0.75);
+      default: AppColors.opacity;
+    }
+    return AppColors.opacity;
+  }
+
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -43,19 +55,21 @@ class HistoryItemWidget extends StatelessWidget {
                 ),
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    decoration: const BoxDecoration(
-                      color: AppColors.baseColor,
+                    decoration: BoxDecoration(
+                      color: statusBgColor(),
                       borderRadius: AppUtils.kBorderRadius4
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                    child: const Text("Одобренный", style: TextStyle(fontSize: 14, color: AppColors.white)),
+                    child: Text(responseData?.statusDescription ?? "", style: const TextStyle(fontSize: 14, color: AppColors.white)),
                   ),
                   AppUtils.kGap8,
                   Text(
                     formatDateFormat(responseData?.createdAt ?? ""),
+                    textAlign: TextAlign.end,
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ],

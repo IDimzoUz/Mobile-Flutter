@@ -91,18 +91,18 @@ class MeProfileWidget extends StatelessWidget {
           ),
         ),
       if (localSource.verification) const Spacer(),
-      if (localSource.verification && editButton) CustomButton(
-        shadowEnabled: false,
-        backgroundColor: AppColors.baseColor.withOpacity(0.08),
-        width: 35,
-        borderRadius: AppUtils.kBorderRadius48,
-        height: 35,
-        padding: EdgeInsets.zero,
-        label: const Icon(Icons.edit, color: Color(0xff677294), size: 20,),
-        onPressed: () {
-          localSource.box.clear();
-          context.pushNamed(Routes.editProfilePage);
-        },
+      if (localSource.verification && editButton) Padding(
+        padding: const EdgeInsets.only(right: 10),
+        child: CustomButton(
+          shadowEnabled: false,
+          backgroundColor: AppColors.baseColor.withOpacity(0.08),
+          width: 35,
+          borderRadius: AppUtils.kBorderRadius48,
+          height: 35,
+          padding: EdgeInsets.zero,
+          label: const Icon(Icons.edit, color: Color(0xff677294), size: 20,),
+          onPressed: onTap,
+        ),
       ),
     ],
   );

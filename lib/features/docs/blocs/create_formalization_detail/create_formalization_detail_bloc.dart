@@ -24,6 +24,4 @@ class CreateFormalizationDetailBloc extends Bloc<CreateFormalizationDetailEvent,
        (CreateContractsResponse right) => emit(state.copyWith(createContractsResponse: right, status: ApiStatus.success))
     );
   }
-
-
 }

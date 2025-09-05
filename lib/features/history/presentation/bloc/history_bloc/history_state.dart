@@ -3,11 +3,11 @@ import 'package:imzo/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:imzo/features/history/presentation/model/for_me_history_response.dart';
 
 final class HistoryState extends Equatable {
-  const HistoryState({required this.status, this.message, this.forMeHistoryResponse});
+  HistoryState({required this.status, this.message, this.forMeHistoryResponse});
 
   final String? message;
   final ApiStatus status;
-  final List<ForMeHistoryResponse>? forMeHistoryResponse;
+  late final List<ForMeHistoryResponse>? forMeHistoryResponse;
 
   HistoryState copyWith({
     String? message,

@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:imzo/core/utils/app_colors.dart";
@@ -25,7 +27,7 @@ class _JobsDetailPageState extends State<NewsDetailPage> with SingleTickerProvid
     // AnimationController ni sozlash (10 soniya davom etadi)
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 5),
+      duration: Duration(seconds: Platform.isIOS ? 5 : 50),
     )..addListener(() {
       setState(() {});
     });

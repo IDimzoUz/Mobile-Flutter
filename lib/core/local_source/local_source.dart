@@ -17,15 +17,16 @@ final class LocalSource {
   Future<void> setLocale(String locale) async {
     await box.put(AppKeys.locale, locale);
   }
-
   String get locale => box.get(AppKeys.locale, defaultValue: defaultLocale);
 
+
   ThemeMode get themeMode => switch (box.get(AppKeys.themeMode)) {
-        "system" => ThemeMode.system,
-        "light" => ThemeMode.light,
-        "dark" => ThemeMode.dark,
-        _ => ThemeMode.system,
-      };
+    "system" => ThemeMode.system,
+    "light" => ThemeMode.light,
+    "dark" => ThemeMode.dark,
+    _ => ThemeMode.system,
+  };
+
 
   Future<void> setThemeMode(ThemeMode mode) async {
     await box.put(AppKeys.themeMode, mode.name);
@@ -37,19 +38,23 @@ final class LocalSource {
   }
   String get accessToken => box.get(AppKeys.accessToken, defaultValue: "");
 
+
   Future<void> setRefreshToken(String refreshToken) async {
     await box.put(AppKeys.refreshToken, refreshToken);
   }
+
 
   Future<void> setFirstName(String firstName) async {
     await box.put(AppKeys.firstname, firstName);
   }
   String getFirstName() => box.get(AppKeys.firstname, defaultValue: "");
 
+
   Future<void> setPhoneNumber(String phoneNumber) async {
     await box.put(AppKeys.phoneNumber, phoneNumber);
   }
   String getPhoneNumber() => box.get(AppKeys.phoneNumber, defaultValue: "");
+
 
   Future<void> setLastName(String lastName) async {
     await box.put(AppKeys.lastname, lastName);
@@ -86,11 +91,11 @@ final class LocalSource {
   }
   String? get language => box.get(AppKeys.language);
 
+
   Future<void> setFcmToken(String token) async {
     await box.put(AppKeys.fcmToken, token);
   }
   String? get fcmToken => box.get(AppKeys.fcmToken, defaultValue: "");
-
 
 
   Future<void> clear() async {

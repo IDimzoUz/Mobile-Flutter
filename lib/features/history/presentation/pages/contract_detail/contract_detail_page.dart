@@ -9,14 +9,15 @@ import "package:imzo/features/docs/presentation/my_paid/my_paid_page.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_event.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_state.dart";
+import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
 import "package:imzo/features/history/presentation/pages/widgets/approved_dialog.dart";
 import "package:imzo/features/history/presentation/pages/widgets/pending_dialog.dart";
 import "package:imzo/router/app_routes.dart";
 
 
 class ContractDetailPage extends StatefulWidget {
-  const ContractDetailPage({super.key, this.contractId});
-  final int? contractId;
+  const ContractDetailPage({super.key, this.dataResponse});
+  final ForMeHistoryResponse? dataResponse;
   @override
   State<ContractDetailPage> createState() => _PageState();
 }
@@ -26,7 +27,7 @@ class _PageState extends State<ContractDetailPage> {
   @override
   void initState() {
     super.initState();
-    context.read<ContractDetailBloc>().add(GetContractDetailEvent(id: widget.contractId ?? 0));
+    context.read<ContractDetailBloc>().add(GetContractDetailEvent(id: widget.dataResponse?.contractId ?? 0));
   }
 
   Future<void> alertVerify(String status, CreateContractsResponse? response) async {
@@ -42,16 +43,17 @@ class _PageState extends State<ContractDetailPage> {
         context.pushNamed(Routes.selectPaymentVerifyPage, extra: response);
         break;
       case "RECIPIENT_APPROVED":
-        await showDialog<void>(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => ApprovedDialog(
-              title: 'Ikkinchi tomondan tasdiqlandi!',
-              desc: 'Shartnoma har ikkala tomondan tasdiqlandi, sabr qilganngiz uchun raxmat',
-              approved: true,
-              onTap: () => context.pushNamed(Routes.myPaid, extra: PaidModel(title: response?.templateName ?? "", id: response?.contractId ?? 0))
-            )
-        );
+        context.pushNamed(Routes.selectPaymentVerifyPage, extra: response);
+        // await showDialog<void>(
+        //     context: context,
+        //     barrierDismissible: false,
+        //     builder: (_) => ApprovedDialog(
+        //       title: 'Ikkinchi tomondan tasdiqlandi!',
+        //       desc: 'Shartnoma har ikkala tomondan tasdiqlandi, sabr qilganngiz uchun raxmat',
+        //       approved: true,
+        //       onTap: () => context.pushNamed(Routes.myPaid, extra: PaidModel(title: response?.templateName ?? "", id: response?.contractId ?? 0))
+        //     )
+        // );
         break;
       case "CANCELLED":
         await showDialog<void>(
@@ -74,7 +76,9 @@ class _PageState extends State<ContractDetailPage> {
   Widget build(BuildContext context) => BlocListener<ContractDetailBloc, ContractDetailState>(
     listener: (BuildContext context, ContractDetailState state) async {
       if (state.response != null) {
-
+        print("state.response?.paid ${state.response?.paid}");
+        print("state.response?.status ${state.response?.status}");
+        print("widget.dataResponse?.forMe ${widget.dataResponse?.forMe}");
       }
     },
     listenWhen: (ContractDetailState p, ContractDetailState c) => p.response != c.response,
@@ -107,15 +111,44 @@ class _PageState extends State<ContractDetailPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        child: CustomButton(
-          width: double.infinity,
-          label: const Text('Следующий'),
-          onPressed: () => alertVerify(state.response?.status ?? "", state.response),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          (state.response?.status == "FULLY_APPROVED" || state.response == null && (widget.dataResponse?.forMe ?? false))
+              ? const SizedBox()
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  child: CustomButton(
+                    width: double.infinity,
+                    label: const Text('Следующий'),
+                    onPressed: () async {
+                      alertVerify(state.response?.status ?? "", state.response);
+                    },
+                  ),
+                ),
+          (!(state.response?.paid ?? false) && !(widget.dataResponse?.forMe ?? false)) && state.response?.status == "FULLY_APPROVED"
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  child: CustomButton(
+                    width: double.infinity,
+                    label: const Text('Следующий adas'),
+                    onPressed: () async {
+                        await showDialog<void>(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (_) => ApprovedDialog(
+                              title: 'Ikkinchi tomondan tasdiqlandi!',
+                              desc: 'Shartnoma har ikkala tomondan tasdiqlandi, sabr qilganngiz uchun raxmat',
+                              approved: true,
+                              onTap: () => context.pushNamed(Routes.myPaid, extra: PaidModel(title: state.response?.templateName ?? "", id: state.response?.contractId ?? 0)),
+                            )
+                        );
+                    },
+                  ),
+              ) : const SizedBox(),
+          ],
         ),
-      ),
-     )
+      )
     )
   );
 }

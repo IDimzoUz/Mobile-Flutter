@@ -8,7 +8,7 @@ import "package:imzo/features/history/presentation/bloc/history_bloc/history_sta
 import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
-  HistoryBloc({required this.repository}) : super(const HistoryState(status: ApiStatus.initial)) {
+  HistoryBloc({required this.repository}) : super(HistoryState(status: ApiStatus.initial)) {
     on<GetForMeHistoryEvent>(_getForMeHistory);
   }
 

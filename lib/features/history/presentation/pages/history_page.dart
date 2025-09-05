@@ -24,7 +24,7 @@ class HistoryPage extends StatefulWidget {
 
 class _PageState extends State<HistoryPage> {
 
-  late bool forMe = false;
+  late bool forMe = true;
   late List<String> monthYearList = generateMonthYearList();
   late String currentMonthYear = getCurrentMonthYear();
   late ScrollController _scrollController = ScrollController();
@@ -57,9 +57,9 @@ class _PageState extends State<HistoryPage> {
 
   void getApi() {
     if (forMe) {
-      context.read<HistoryBloc>().add(const GetForMeHistoryEvent(forMe: true));
-    } else {
       context.read<HistoryBloc>().add(const GetForMeHistoryEvent(forMe: false));
+    } else {
+      context.read<HistoryBloc>().add(const GetForMeHistoryEvent(forMe: true));
     }
   }
 
@@ -208,10 +208,14 @@ class _PageState extends State<HistoryPage> {
                 Expanded(
                   child: ListView.separated(
                     padding: const EdgeInsets.only(left: 16, right: 16),
-                    itemBuilder: (_, int index) => HistoryItemWidget(
-                      onTap: () => context.pushNamed(Routes.historyDetailPage, extra: state.forMeHistoryResponse?[index]),
-                      responseData: state.forMeHistoryResponse?[index],
-                    ),
+                    itemBuilder: (_, int index) {
+                      state.forMeHistoryResponse?[index].forMe = forMe;
+                      print("state.forMeHistoryResponse?[index].forCreator ${state.forMeHistoryResponse?[index].forMe}");
+                      return HistoryItemWidget(
+                        onTap: () => context.pushNamed(Routes.historyDetailPage, extra: state.forMeHistoryResponse?[index]),
+                        responseData: state.forMeHistoryResponse?[index],
+                      );
+                    },
                     separatorBuilder: (_, __) => AppUtils.kGap,
                     itemCount: state.forMeHistoryResponse?.length ?? 0,
                   ),

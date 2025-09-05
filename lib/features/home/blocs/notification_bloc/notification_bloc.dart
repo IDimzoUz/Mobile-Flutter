@@ -12,6 +12,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc({required this.repository}) : super(const NotificationState(status: ApiStatus.initial)) {
     on<GetNotificationEvent>(_getAllNotifications);
     on<PutNotificationIsReadEvent>(_putNotificationIsRead);
+    on<DeleteContractNotificationEvent>(_deleteContractNotification);
   }
 
   final Repository repository;
@@ -25,6 +26,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       },
     );
   }
+
+  Future<void> _deleteContractNotification(DeleteContractNotificationEvent event, Emitter<NotificationState> emit) async {
+    final result = await repository.deleteContractNotification(id: event.id);
+    await result.fold((Failure left) { }, (bool right) async { });
+  }
+
 
   Future<void> _putNotificationIsRead(PutNotificationIsReadEvent event, Emitter<NotificationState> emit) async {
       final result = await repository.editNotificationIsRead(id: event.id, allRead: event.allRead);

@@ -7,8 +7,7 @@ final class AppLocalizations {
 
   final Locale locale;
 
-  static AppLocalizations? of(BuildContext context) =>
-      Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations? of(BuildContext context) => Localizations.of<AppLocalizations>(context, AppLocalizations);
 
   late Map<String, String> _localizedValues = <String, String>{};
 
@@ -29,8 +28,18 @@ final class AppLocalizations {
   }
 
   Future<void> load() async {
+
+    String languageCode = locale.languageCode;
+
+    // Uzbek tilining kiril versiyasi uchun alohida fayl
+    if (languageCode == 'uz' && locale.countryCode == 'Cyrl') {
+      languageCode = 'uz_cyrl';
+    }
+
+    print("LOCAL: $languageCode");
+
     final String jsonContent = await rootBundle.loadString(
-      "assets/locale/${locale.languageCode}.json",
+      "assets/locale/${localSource.language}.json",
     );
     final Map<String, dynamic> jsonMap = json.decode(jsonContent);
     _localizedValues = jsonMap.map<String, String>(
@@ -38,6 +47,5 @@ final class AppLocalizations {
     );
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = AppLocalizationsDelegate();
 }

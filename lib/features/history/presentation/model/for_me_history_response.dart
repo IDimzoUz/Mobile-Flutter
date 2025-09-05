@@ -5,6 +5,9 @@ class ForMeHistoryResponse {
   String? createdAt;
   String? recipientDocumentId;
   String? recipientBirthDate;
+  String? status;
+  String? statusDescription;
+  bool? forMe;
 
   ForMeHistoryResponse({
     this.contractId,
@@ -12,7 +15,10 @@ class ForMeHistoryResponse {
     this.content,
     this.createdAt,
     this.recipientDocumentId,
-    this.recipientBirthDate
+    this.recipientBirthDate,
+    this.status,
+    this.statusDescription,
+    this.forMe = true,
   });
 
   ForMeHistoryResponse.fromJson(Map<String, dynamic> json) {
@@ -22,6 +28,8 @@ class ForMeHistoryResponse {
     createdAt = json['createdAt'];
     recipientDocumentId = json['recipientDocumentId'];
     recipientBirthDate = json['recipientBirthDate'];
+    status = json['status'];
+    statusDescription = json['statusDescription'];
   }
 
   Map<String, dynamic> toJson() {
@@ -32,6 +40,8 @@ class ForMeHistoryResponse {
     data['createdAt'] = this.createdAt;
     data['recipientDocumentId'] = this.recipientDocumentId;
     data['recipientBirthDate'] = this.recipientBirthDate;
+    data['status'] = this.status;
+    data['statusDescription'] = this.statusDescription;
     return data;
   }
 }

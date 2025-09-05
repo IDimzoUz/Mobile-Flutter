@@ -8,10 +8,11 @@ import "package:imzo/features/home/model/notifications_response.dart";
 import "package:imzo/features/home/presentation/notification/widgets/notification_note_bottom_sheet.dart";
 
 class NotificationContractItemWidget extends StatelessWidget {
-  const NotificationContractItemWidget({super.key, this.data, this.onTapOpen});
+  const NotificationContractItemWidget({super.key, this.data, this.onTapOpen, this.onTapDelete});
 
   final Content? data;
   final VoidCallback? onTapOpen;
+  final VoidCallback? onTapDelete;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -58,7 +59,7 @@ class NotificationContractItemWidget extends StatelessWidget {
               height: 38,
               backgroundColor: AppColors.red,
               borderRadius: AppUtils.kBorderRadius8,
-              onPressed: () async { },
+              onPressed: onTapDelete,
               label: const Text(
                 "Отменить",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),

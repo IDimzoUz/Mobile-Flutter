@@ -23,6 +23,51 @@ class DateTextFieldItemState extends State<DateTextFieldItemWidget> {
 
   final TextEditingController _controller = TextEditingController();
   bool _isError = false;
+  final int _maxLength = 10;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_applyMask);
+  }
+
+  void _applyMask() {
+    final text = _controller.text.replaceAll(RegExp(r'[^\d]'), '');
+    String masked = '';
+
+    for (int i = 0; i < text.length; i++) {
+      if (i == 4) masked += '-';
+      if (i == 6) masked += '-';
+      if (i < 8) masked += text[i];
+    }
+
+    if (masked != _controller.text) {
+      _controller.value = TextEditingValue(
+        text: masked,
+        selection: TextSelection.collapsed(offset: masked.length),
+      );
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _controller.text = _formatDate(picked);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -83,10 +128,18 @@ class DateTextFieldItemState extends State<DateTextFieldItemWidget> {
         fillColor: AppColors.white,
         cursorColor: AppColors.baseColor,
         controller: _controller,
-        suffixIcon: Padding(
-          padding: const EdgeInsets.all(10),
-          child: SvgPicture.asset(SvgIcons.icCalendarMini),
+        textInputType: TextInputType.number,
+        suffixIcon: GestureDetector(
+          onTap: () => _selectDate(context),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(SvgIcons.icCalendarMini),
+          ),
         ),
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(8), // 8 ta raqam (YYYYMMDD)
+        ],
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.baseColor),

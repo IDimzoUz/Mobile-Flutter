@@ -86,7 +86,7 @@ class _PageState extends State<NotificationPage> {
                   setState(() {
                     data?.content?[index].isRead = true;
                   });
-                  context.pushNamed(Routes.contractDetailPage, extra: ForMeHistoryResponse(contractId: data?.content?[index].contractId));
+                  context.pushNamed(Routes.contractDetailForMePage, extra: ForMeHistoryResponse(contractId: data?.content?[index].contractId));
                 },
                 onTapDelete: () {
                   setState(() {

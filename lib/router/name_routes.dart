@@ -26,7 +26,8 @@ sealed class Routes { Routes._();
   static const String createFormalizationDetailPage = "/createFormalizationDetailPage";
   static const String myPaid = "/myPaid";
   static const String selectPaymentVerifyPage = "/selectPaymentVerifyPage";
-  static const String contractDetailPage = "/contractDetailPage";
+  static const String contractDetailForMePage = "/contractDetailForMePage";
+  static const String contractDetailMyCreatorPage = "/contractDetailMyCreatorPage";
   static const String createOtpPage = "/createOtpPage";
   static const String newsDetailPage = "/newsDetailPage";
 

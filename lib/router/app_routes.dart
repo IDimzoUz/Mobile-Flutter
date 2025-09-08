@@ -15,6 +15,7 @@ import "package:imzo/features/docs/blocs/create_formalization_detail/create_form
 import "package:imzo/features/docs/blocs/formalization/formalization_bloc.dart";
 import "package:imzo/features/docs/blocs/my_paid/my_paid_bloc.dart";
 import "package:imzo/features/docs/blocs/select_lang_docs/select_lang_docs_bloc.dart";
+import "package:imzo/features/docs/blocs/select_payment_verify/select_payment_verify_bloc.dart";
 import "package:imzo/features/docs/model/create_contracts_response.dart";
 import "package:imzo/features/docs/presentation/create_formalization/create_formalization_page.dart";
 import "package:imzo/features/docs/presentation/create_formalization_detail/create_formalization_detail_page.dart";
@@ -26,7 +27,8 @@ import "package:imzo/features/docs/presentation/select_payment_verify/select_pay
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc/history_bloc.dart";
 import "package:imzo/features/history/presentation/model/for_me_history_response.dart";
-import "package:imzo/features/history/presentation/pages/contract_detail/contract_detail_page.dart";
+import "package:imzo/features/history/presentation/pages/contract_detail_for_me/contract_detail_for_me_page.dart";
+import "package:imzo/features/history/presentation/pages/contract_detail_my_created/contract_detail_my_creator_page.dart";
 import "package:imzo/features/history/presentation/pages/history_detail/history_detail_page.dart";
 import "package:imzo/features/history/presentation/pages/history_page.dart";
 import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
@@ -230,8 +232,12 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
           context: context,
           state: state,
-          child: SelectPaymentVerifyPage(response: state.extra! as CreateContractsResponse)
+          child: BlocProvider<SelectPaymentVerifyBloc>(
+              create: (_) => sl<SelectPaymentVerifyBloc>(),
+              child: SelectPaymentVerifyPage(response: state.extra! as CreateContractsResponse)
+          )
       ),
+
     ),
 
     GoRoute(
@@ -323,15 +329,29 @@ final GoRouter router = GoRouter(
     ),
 
     GoRoute(
-      path: Routes.contractDetailPage,
-      name: Routes.contractDetailPage,
+      path: Routes.contractDetailForMePage,
+      name: Routes.contractDetailForMePage,
       parentNavigatorKey: rootNavigatorKey,
       pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
           context: context,
           state: state,
           child: BlocProvider<ContractDetailBloc>(
               create: (_) => sl<ContractDetailBloc>(),
-              child: ContractDetailPage(dataResponse: state.extra! as ForMeHistoryResponse)
+              child: ContractDetailForMePage(dataResponse: state.extra! as ForMeHistoryResponse)
+          )
+      ),
+    ),
+
+    GoRoute(
+      path: Routes.contractDetailMyCreatorPage,
+      name: Routes.contractDetailMyCreatorPage,
+      parentNavigatorKey: rootNavigatorKey,
+      pageBuilder: (context, state) => buildPageWithDefaultTransition<void>(
+          context: context,
+          state: state,
+          child: BlocProvider<ContractDetailBloc>(
+              create: (_) => sl<ContractDetailBloc>(),
+              child: ContractDetailMyCreatorPage(dataResponse: state.extra! as ForMeHistoryResponse)
           )
       ),
     ),

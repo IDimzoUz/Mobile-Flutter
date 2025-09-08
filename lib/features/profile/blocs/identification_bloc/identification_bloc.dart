@@ -12,20 +12,20 @@ part "identification_event.dart";
 part "identification_state.dart";
 
 class IdentificationBloc extends Bloc<IdentificationEvent, IdentificationState> {
-  IdentificationBloc({required this.repository}) : super(const IdentificationState(status: ApiStatus.initial)) {
+  IdentificationBloc({required this.repository}) : super(IdentificationState(status: ApiStatus.initial)) {
     on<GetMyIDTokenEvent>(_getMyIDToken);
     on<GetMyIDMeEvent>(_getMyIDMe);
     on<EditProfileEvent>(_getUserMe);
-
+    on<GetOneIdUrlEvent>(_getOneIdUrl);
   }
 
   final Repository repository;
 
   Future<void> _getMyIDToken(GetMyIDTokenEvent event, Emitter<IdentificationState> emit) async {
-    emit(const IdentificationState(status: ApiStatus.loading));
+    emit(IdentificationState(status: ApiStatus.loading));
     final result = await repository.getMyIDToken(code: event.code);
     await result.fold(
-          (Failure left) { emit(const IdentificationState(status: ApiStatus.error)); },
+          (Failure left) { emit(IdentificationState(status: ApiStatus.error)); },
           (MyIDAccessTokenResponse right) async {
         emit(IdentificationState(status: ApiStatus.success, myIDAccessToken: right));
       },
@@ -34,10 +34,10 @@ class IdentificationBloc extends Bloc<IdentificationEvent, IdentificationState> 
 
 
   Future<void> _getMyIDMe(GetMyIDMeEvent event, Emitter<IdentificationState> emit) async {
-    emit(const IdentificationState(status: ApiStatus.loading));
+    emit(IdentificationState(status: ApiStatus.loading));
     final result = await repository.getMyIDMe(token: event.token);
     await result.fold(
-          (Failure left) { emit(const IdentificationState(status: ApiStatus.error)); },
+          (Failure left) { emit( IdentificationState(status: ApiStatus.error)); },
           (MyIDMeResponse right) async {
         emit(IdentificationState(status: ApiStatus.success, myIDMeResponse: right));
       },
@@ -46,12 +46,22 @@ class IdentificationBloc extends Bloc<IdentificationEvent, IdentificationState> 
 
 
   Future<void> _getUserMe(EditProfileEvent event, Emitter<IdentificationState> emit) async {
-    emit(const IdentificationState(status: ApiStatus.loading));
+    emit(IdentificationState(status: ApiStatus.loading));
     final result = await repository.getUserMe(edit: event.editData);
     await result.fold(
-          (Failure left) { emit(const IdentificationState(status: ApiStatus.error)); },
+          (Failure left) { emit(IdentificationState(status: ApiStatus.error)); },
           (UserMeResponse right) async {
         emit(IdentificationState(status: ApiStatus.success, userMeResponse: right));
+      },
+    );
+  }
+
+  Future<void> _getOneIdUrl(GetOneIdUrlEvent event, Emitter<IdentificationState> emit) async {
+    final result = await repository.getOneIdAuthUrl();
+    await result.fold(
+          (Failure left) { emit(IdentificationState(status: ApiStatus.error)); },
+          (String right) async {
+        emit(IdentificationState(status: ApiStatus.success, oneIDUrl: right));
       },
     );
   }

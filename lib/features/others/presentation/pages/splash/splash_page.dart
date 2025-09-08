@@ -10,7 +10,6 @@ import "package:imzo/core/theme/themes.dart";
 import "package:imzo/core/widgets/bottom_sheet/custom_bottom_sheet.dart";
 import "package:imzo/core/widgets/bottom_sheet/update_app_sheet.dart";
 import "package:imzo/router/app_routes.dart";
-import "package:imzo/services/remote_config_service.dart";
 import "package:url_launcher/url_launcher.dart";
 
 part "mixins/splash_mixin.dart";

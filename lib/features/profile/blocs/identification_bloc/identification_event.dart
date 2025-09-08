@@ -25,3 +25,9 @@ final class EditProfileEvent extends IdentificationEvent {
   @override
   List<Object?> get props => [ editData ];
 }
+
+final class GetOneIdUrlEvent extends IdentificationEvent {
+  const GetOneIdUrlEvent();
+  @override
+  List<Object?> get props => [ ];
+}

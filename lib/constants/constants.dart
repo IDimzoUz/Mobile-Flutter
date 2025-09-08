@@ -77,6 +77,7 @@ sealed class Urls {
   static const String news = "/api/news";
   static const String premiumFcmToken = "/api/premium/fcm-token";
   static const String spendingByProduct = "/api/user/spending/by-product";
+  static const String oneIdAuthUrl = "/api/oneid/auth-url";
 
 
 

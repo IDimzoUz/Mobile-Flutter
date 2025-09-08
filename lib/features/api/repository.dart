@@ -33,6 +33,7 @@ const Repository();
   Future<Either<Failure, PaymentResponse>> getPaymentStatus({required int id});
   Future<Either<Failure, String>> sendCreatorApprovalCode({required int id});
   Future<Either<Failure, CreateContractsResponse>> sendVerifyAndApproveAsCreator({required int id, required String code});
+  Future<Either<Failure, CreateContractsResponse>> sendMyIDApprove({required int contractID, required bool creator});
   Future<Either<Failure, String>> sendRecipientApprovalCode({required int id});
   Future<Either<Failure, CreateContractsResponse>> sendVerifyAndApproveAsRecipient({required int id, required String code});
   Future<Either<Failure, UsersSearchResponse>> getUsersSearch({required String search});
@@ -44,6 +45,7 @@ const Repository();
   Future<Either<Failure, bool>> deleteContractNotification({required int id});
   Future<Either<Failure, CreateContractsResponse>> getContractDetail({required int id});
   Future<Either<Failure, bool>> sendFCMToken();
+  Future<Either<Failure, String>> getOneIdAuthUrl();
   Future<Either<Failure, bool>> editNotificationIsRead({required int id, required bool allRead});
 
 

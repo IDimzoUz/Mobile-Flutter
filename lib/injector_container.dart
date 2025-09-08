@@ -2,6 +2,7 @@
 import "dart:developer";
 import "dart:io";
 
+import "package:app_links/app_links.dart";
 import "package:dio/dio.dart";
 import "package:dio/io.dart";
 import "package:dio_retry_plus/dio_retry_plus.dart";
@@ -21,6 +22,7 @@ import "package:imzo/core/local_source/local_source.dart";
 import "package:imzo/features/api/repository.dart";
 import "package:imzo/features/api/repository_impl.dart";
 import "package:imzo/features/auth/presentation/bloc/otp/otp_bloc.dart";
+import "package:imzo/features/docs/blocs/select_payment_verify/select_payment_verify_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/contract_detail_bloc/contract_detail_bloc.dart";
 import "package:imzo/features/history/presentation/bloc/history_bloc/history_bloc.dart";
 import "package:imzo/features/home/blocs/home_bloc/home_page_bloc.dart";
@@ -35,6 +37,7 @@ import "package:path_provider/path_provider.dart";
 
 final GetIt sl = GetIt.instance;
 late Box<dynamic> _box;
+final appLinks = sl<AppLinks>();
 
 Future<void> init() async {
   /// External
@@ -135,6 +138,7 @@ Future<void> init() async {
 
   /// Core
   sl
+    ..registerLazySingleton<AppLinks>(AppLinks.new)
     ..registerSingleton<LocalSource>(LocalSource(_box))
     ..registerLazySingleton(
       () => InternetConnectionChecker.createInstance(
@@ -170,6 +174,7 @@ void _authFeature() {
     ..registerFactory(() => CreateFormalizationBloc(repository: sl()))
     ..registerFactory(() => CreateFormalizationDetailBloc(repository: sl()))
     ..registerFactory(() => MyPaidBloc(repository: sl()))
+    ..registerFactory(() => SelectPaymentVerifyBloc(repository: sl()))
     ..registerFactory(() => HistoryBalanceBloc(repository: sl()))
     ..registerFactory(() => NotificationBloc(repository: sl()))
     ..registerFactory(() => FormalizationBloc(repository: sl()))

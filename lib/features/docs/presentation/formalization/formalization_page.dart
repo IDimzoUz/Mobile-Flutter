@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
@@ -34,6 +35,32 @@ class _PageState extends State<FormalizationPage> {
   final TextEditingController _controllerPhoneNumber2 = TextEditingController();
   final TextEditingController _controllerPhoneNumber3 = TextEditingController();
   late List<String> phoneList = [];
+  final int _maxLength = 10;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerBirthday.addListener(_applyMask);
+  }
+
+  void _applyMask() {
+    final text = _controllerBirthday.text.replaceAll(RegExp(r'[^\d]'), '');
+    String masked = '';
+
+    for (int i = 0; i < text.length; i++) {
+      if (i == 4) masked += '-';
+      if (i == 6) masked += '-';
+      if (i < 8) masked += text[i];
+    }
+
+    if (masked != _controllerBirthday.text) {
+      _controllerBirthday.value = TextEditingValue(
+        text: masked,
+        selection: TextSelection.collapsed(offset: masked.length),
+      );
+    }
+  }
 
   String returnErrorText() {
     if (_controllerPassportID.text.isEmpty) {
@@ -47,10 +74,39 @@ class _PageState extends State<FormalizationPage> {
     }
   }
 
+  String _formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _controllerBirthday.text = _formatDate(picked);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controllerPassportID.dispose();
+    _controllerBirthday.dispose();
+    _controllerPhoneNumber.dispose();
+    _controllerPhoneNumber2.dispose();
+    _controllerPhoneNumber3.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => BlocBuilder<FormalizationBloc, FormalizationState>(
     buildWhen: (p, n) => p.usersSearchResponse != n.usersSearchResponse,
-    builder: (context, state) =>  Scaffold(
+    builder: (context, state) => Scaffold(
       appBar: AppBar(
         title: const Text(
           "Оформление",
@@ -127,7 +183,15 @@ class _PageState extends State<FormalizationPage> {
                       hintText: "2000-12-12",
                       controller: _controllerBirthday,
                       fillColor: AppColors.baseColor.withOpacity(0.08),
-                      suffixIcon: const Icon(Icons.calendar_today_rounded, color: AppColors.baseColor),
+                      textInputType: TextInputType.number,
+                      suffixIcon: GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: const Icon(Icons.calendar_today_rounded, color: AppColors.baseColor),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(8), // 8 ta raqam (YYYYMMDD)
+                      ],
                       cursorColor: AppColors.grey2,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

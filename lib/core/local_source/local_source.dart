@@ -89,7 +89,7 @@ final class LocalSource {
   Future<void> setLanguage(String lang) async {
     await box.put(AppKeys.language, lang);
   }
-  String? get language => box.get(AppKeys.language);
+  String? get language => box.get(AppKeys.language, defaultValue: "en");
 
 
   Future<void> setFcmToken(String token) async {

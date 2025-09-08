@@ -7,6 +7,7 @@ mixin SplashMixin on State<SplashPage> {
     if (!mounted) {
       return;
     }
+    print('LOCAL LANG: ${localSource.language} ${localSource.locale}');
     Future.delayed(const Duration(seconds: 2), () async {
       // ignore: discarded_futures
       await nextToNavigation();

@@ -23,6 +23,7 @@ import "package:imzo/features/profile/model/my_id_access_token_response.dart";
 import "package:imzo/features/profile/model/my_id_me_response.dart";
 import "package:imzo/features/profile/model/user_me_response.dart";
 import "package:imzo/router/app_routes.dart";
+import "package:uuid/uuid.dart";
 
 
 class RepositoryImpl implements Repository {
@@ -551,6 +552,45 @@ class RepositoryImpl implements Repository {
     }
   }
 
+
+  @override
+  Future<Either<Failure, CreateContractsResponse>> sendMyIDApprove({required int contractID, required bool creator}) async {
+    try {
+      String url = "";
+      if (creator) {
+        url = "${Constants.baseUrl}${Urls.usersContracts}/$contractID/approve-as-creator";
+      } else {
+        url = "${Constants.baseUrl}${Urls.usersContracts}/$contractID/approve-as-recipient";
+      }
+      final Response response = await dio.post(url, options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }) );
+      return Right(CreateContractsResponse.fromJson(response.data));
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
+
+
+  @override
+  Future<Either<Failure, String>> getOneIdAuthUrl() async {
+    try {
+      final Response response = await dio.get(
+        "${Constants.baseUrl}${Urls.oneIdAuthUrl}",
+        options: Options(headers: { "Authorization": "Bearer ${localSource.accessToken}" }),
+        queryParameters: { "state": const Uuid().v4() }
+      );
+      return Right(response.data['authUrl']);
+    } on DioException catch (error, stacktrace) {
+      log("Exception occurred -: $error stacktrace: $stacktrace");
+      return Left(ServerError.withDioError(error: error).failure);
+    } on Exception catch (error, stacktrace) {
+      log("Exception occurred --: $error stacktrace: $stacktrace");
+      return Left(ServerError.withError(message: error.toString()).failure);
+    }
+  }
 
 
 }

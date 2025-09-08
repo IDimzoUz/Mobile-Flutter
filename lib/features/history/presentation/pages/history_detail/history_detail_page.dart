@@ -80,7 +80,7 @@ class _PageState extends State<HistoryDetailPage> {
                           backgroundColor: AppColors.opacity,
                           padding: EdgeInsets.zero,
                           label: SvgPicture.asset(SvgIcons.icEye),
-                          onPressed: () => context.pushNamed(Routes.contractDetailPage, extra: widget.dataResponse),
+                          onPressed: () => context.pushNamed((widget.dataResponse!.forMe!) ? Routes.contractDetailForMePage : Routes.contractDetailMyCreatorPage, extra: widget.dataResponse),
                         ),
                         AppUtils.kGap12,
                         CustomButton(
